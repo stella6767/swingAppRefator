@@ -14,10 +14,6 @@ class InitPanel(
     val gameFrame: GameFrame
 ) : JPanel() {
 
-
-//    val resource =
-//        this::class.java.getResource("/images/GameTitle.gif")
-
     private val titleIcon = "/images/GameTitle.gif".toImageIcon(this::class.java)
 
     init {
