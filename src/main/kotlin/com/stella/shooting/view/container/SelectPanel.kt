@@ -1,7 +1,7 @@
 package com.stella.shooting.view.container
 
 import com.stella.shooting.config.*
-import com.stella.shooting.model.PlayerPlane
+import com.stella.shooting.model.PlayerUnit
 import com.stella.shooting.view.component.PlayerLabel
 import java.awt.Graphics
 import java.awt.event.MouseAdapter
@@ -93,14 +93,7 @@ class SelectPanel(
     }
 
     private fun createPlayer(playerKind: PlayerKind): PlayerLabel { // 비행기 선택 후 비행기 new add
-
-        val playerPlane = PlayerPlane(
-            playerIcon = "/images/Player${playerKind.name}.png".toImageIcon(this::class.java),
-            playerInvincibleIcon = "/images/${playerKind.name}무적.png".toImageIcon(this::class.java)
-        )
-        val playerLabel = PlayerLabel(playerPlane)
-        return playerLabel
+        return PlayerLabel(PlayerUnit(playerKind))
     }
-
 
 }

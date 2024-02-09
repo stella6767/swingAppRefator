@@ -1,14 +1,12 @@
 package com.stella.shooting.view.container
 
+import com.stella.shooting.config.PanelName
 import com.stella.shooting.config.toImageIcon
-import com.stella.shooting.model.PlayerPlane
 import com.stella.shooting.view.component.PlayerLabel
 import java.awt.Graphics
 import java.awt.Image
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
-import java.util.*
-import javax.swing.ImageIcon
 import javax.swing.JLabel
 import javax.swing.JPanel
 
@@ -38,12 +36,9 @@ class GamePanel(
 
     init {
         this.add(player)
-
         val thread = Thread(player)
         thread.name = "player"
         thread.start()
-
-
         keyListener()
     }
 
@@ -51,6 +46,7 @@ class GamePanel(
 
     override fun run() {
 
+        layout = null
         this.add(lifeCountLabel1)
         this.add(lifeCountLabel2)
         this.add(lifeCountLabel3)
@@ -63,7 +59,6 @@ class GamePanel(
 
         while (isPlaying) {
 
-            layout = null
             stageY++
             bossStageBY1++
             bossStageBY2++
@@ -82,7 +77,6 @@ class GamePanel(
             batchEnemy()
             //crushBorder()
             appear++
-
             repaint()
             Thread.sleep(10)
         }
@@ -128,7 +122,7 @@ class GamePanel(
         g.drawImage(bossStageImg, 0, bossStageBY1, null)
         g.drawImage(bossStageImg, 0, bossStageBY2, null)
 
-        //player.playerUpdate(g)
+        player.paintBullet(g)
 
 //        for (i in enemyUnits.indices) { // null이 아니면 그려라
 //            if (enemyUnits.get(i) != null) {
@@ -153,8 +147,8 @@ class GamePanel(
             override fun keyPressed(e: KeyEvent) {
                 when (e.keyCode) {
 //                    KeyEvent.VK_1 -> player.setWepponLevelUp(true)
-//                    KeyEvent.VK_ENTER -> change(PanelName.SELECTAPI)
-//                    KeyEvent.VK_SPACE -> player.setAttack(true)
+                    KeyEvent.VK_ENTER -> gameFrame.change(PanelName.SELECTAPI)
+                    KeyEvent.VK_SPACE -> playerModel.isAttack = true
                     KeyEvent.VK_UP -> playerModel.isUp =true
                     KeyEvent.VK_DOWN -> playerModel.isDown = true
                     KeyEvent.VK_LEFT -> playerModel.isLeft = true
@@ -165,7 +159,7 @@ class GamePanel(
             override fun keyReleased(e: KeyEvent) {
                 when (e.keyCode) {
 //                    KeyEvent.VK_1 -> playerModel.setWepponLevelUp(false)
-//                    KeyEvent.VK_SPACE -> playerModel.setAttack(false)
+                    KeyEvent.VK_SPACE -> playerModel.isAttack = false
                     KeyEvent.VK_UP -> playerModel.isUp = false
                     KeyEvent.VK_DOWN -> playerModel.isDown = false
                     KeyEvent.VK_LEFT -> playerModel.isLeft = false
