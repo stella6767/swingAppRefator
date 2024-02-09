@@ -2,25 +2,31 @@ package com.stella.shooting.view.container
 
 import com.stella.shooting.config.PanelName
 import com.stella.shooting.config.toImageIcon
+import com.stella.shooting.model.EnemyUnit
+import com.stella.shooting.view.component.EnemyUnitLabel
 import com.stella.shooting.view.component.PlayerLabel
 import java.awt.Graphics
 import java.awt.Image
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
+import java.util.*
 import javax.swing.JLabel
 import javax.swing.JPanel
+import kotlin.math.abs
 
 class GamePanel(
     private val gameFrame: GameFrame,
-    private val player: PlayerLabel
+    private val playerLabel: PlayerLabel
 ) : JPanel(), Runnable {
 
-    private val playerModel = player.player
+    private val player = playerLabel.player
 
     private var isPlaying: Boolean = true // 게임실행 여부
     private val stageImg: Image = "/images/Stage.png".toImageIcon(this::class.java).image // 배경 이미지
     private val bossStageImg: Image = "/images/vsBossStage.png".toImageIcon(this::class.java).image // 보스 스테이지 이미지
     private val titleImg: Image = "/images/GameTitle.gif".toImageIcon(this::class.java).image
+    private val explosionIcon = "/images/explosion.gif".toImageIcon(this::class.java)
+
 
     var stageY: Int = -(stageImg.getHeight(null) - bossStageImg.getHeight(null)) // 배경 이미지의 Y좌표
     var bossStageBY1: Int = -(stageImg.getHeight(null)) // 보스 스테이지 이미지 1의 Y좌표
@@ -32,16 +38,17 @@ class GamePanel(
     private val lifeCountLabel2 = JLabel(lifeCount)
     private val lifeCountLabel3 = JLabel(lifeCount)
 
-    //var enemyUnits = Vector<EnemyUnit>() // 적 유닛을 모아놓을 배열
+
+    var enemys = (mutableListOf<EnemyUnitLabel>()) // 적 유닛을 모아놓을 배열
+
 
     init {
-        this.add(player)
-        val thread = Thread(player)
+        this.add(playerLabel)
+        val thread = Thread(playerLabel)
         thread.name = "player"
         thread.start()
         keyListener()
     }
-
 
 
     override fun run() {
@@ -73,47 +80,58 @@ class GamePanel(
                 }
             }
 
-            //lifeCounting()
+            lifeCounting()
             batchEnemy()
-            //crushBorder()
+            //checkCrush()
+
             appear++
             repaint()
             Thread.sleep(10)
         }
     }
 
-//    private fun lifeCounting() {
-//        if (player.life == 2) {
-//            lifeCountLabel3.isVisible = false
-//        } else if (player.life === 1) {
-//            lifeCountLabel2.isVisible = false
-//        } else {
-//            lifeCountLabel1.isVisible = false
-//        }
-//        repaint()
-//    }
+
+    private fun lifeCounting() {
+        if (player.life == 2) {
+            lifeCountLabel3.isVisible = false
+        } else if (player.life === 1) {
+            lifeCountLabel2.isVisible = false
+        } else {
+            lifeCountLabel1.isVisible = false
+        }
+        repaint()
+    }
 
 
-    fun batchEnemy() { // 적기 맵에 배치
+    private fun batchEnemy() { // 적기 맵에 배치
 
+        if (appear == 1000 || appear == 3000) {
+
+            val image = "/images/enemy1.png".toImageIcon(this::class.java)
+            enemys.add(EnemyUnitLabel(EnemyUnit(50, 0, 50, 50, image)))
+            enemys.add(EnemyUnitLabel(EnemyUnit(100, -50, 50, 50, image)))
+            enemys.add(EnemyUnitLabel(EnemyUnit(150, -100, 50, 50, image)))
+            enemys.add(EnemyUnitLabel(EnemyUnit(200, -150, 50, 50, image)))
+            enemys.add(EnemyUnitLabel(EnemyUnit(250, -200, 50, 50, image)))
+        }
 
     }
 
-//    fun crushBorder() { // 벽에 충돌하는 조건함수 >> Map 스레드 안에 적용
-//
-//        if (player.x <= 0) {
-//            player.x = 0
-//        } else if (player.x >= 550) {
-//            player.x = 550
-//        }
-//        if (player.y <= 0) {
-//            player.y = 0
-//
-//        } else if (player.y >= 720) {
-//            player.y = 720
-//        }
-//        repaint()
-//    }
+    private fun checkCrush(enemy: EnemyUnitLabel) { // 적기 출돌판정
+
+        if (abs((playerLabel.x + playerLabel.width / 2) - (x + playerLabel.width / 2)) < (width / 2
+                    + playerLabel.width / 2)
+            && abs((playerLabel.y + playerLabel.height / 2) - (y + height / 2)) < (height / 2
+                    + playerLabel.height / 2)
+            && !player.isInvincible
+
+        ) {
+            player.isCollision = true
+            enemy.crushToPlayer()
+        }
+
+
+    }
 
 
     override fun paintComponent(g: Graphics) {
@@ -122,23 +140,12 @@ class GamePanel(
         g.drawImage(bossStageImg, 0, bossStageBY1, null)
         g.drawImage(bossStageImg, 0, bossStageBY2, null)
 
-        player.paintBullet(g)
+        playerLabel.paintBullet(g)
+        for (enemy in enemys) {
+            enemy.enemyDraw(g)
+        }
 
-//        for (i in enemyUnits.indices) { // null이 아니면 그려라
-//            if (enemyUnits.get(i) != null) {
-//                enemyUnits.get(i).enemyUpdate(g)
-//            }
-//        }
-//
-//        if (player != null) {
-//            player.playerUpdate(g)
-//        }
-//
-//        if (boss != null) {
-//            boss.bossUpdate(g)
-//        }
-
-        //repaint()
+        //boss.bossUpdate(g)
     }
 
 
@@ -148,29 +155,25 @@ class GamePanel(
                 when (e.keyCode) {
 //                    KeyEvent.VK_1 -> player.setWepponLevelUp(true)
                     KeyEvent.VK_ENTER -> gameFrame.change(PanelName.SELECTAPI)
-                    KeyEvent.VK_SPACE -> playerModel.isAttack = true
-                    KeyEvent.VK_UP -> playerModel.isUp =true
-                    KeyEvent.VK_DOWN -> playerModel.isDown = true
-                    KeyEvent.VK_LEFT -> playerModel.isLeft = true
-                    KeyEvent.VK_RIGHT -> playerModel.isRight = true
+                    KeyEvent.VK_SPACE -> player.isAttack = true
+                    KeyEvent.VK_UP -> player.isUp = true
+                    KeyEvent.VK_DOWN -> player.isDown = true
+                    KeyEvent.VK_LEFT -> player.isLeft = true
+                    KeyEvent.VK_RIGHT -> player.isRight = true
                 }
             }
 
             override fun keyReleased(e: KeyEvent) {
                 when (e.keyCode) {
 //                    KeyEvent.VK_1 -> playerModel.setWepponLevelUp(false)
-                    KeyEvent.VK_SPACE -> playerModel.isAttack = false
-                    KeyEvent.VK_UP -> playerModel.isUp = false
-                    KeyEvent.VK_DOWN -> playerModel.isDown = false
-                    KeyEvent.VK_LEFT -> playerModel.isLeft = false
-                    KeyEvent.VK_RIGHT -> playerModel.isRight = false
+                    KeyEvent.VK_SPACE -> player.isAttack = false
+                    KeyEvent.VK_UP -> player.isUp = false
+                    KeyEvent.VK_DOWN -> player.isDown = false
+                    KeyEvent.VK_LEFT -> player.isLeft = false
+                    KeyEvent.VK_RIGHT -> player.isRight = false
                 }
             }
         })
     }
-
-
-
-
 
 }

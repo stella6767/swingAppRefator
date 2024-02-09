@@ -6,4 +6,5 @@ interface Unit {
     val x:Int
     val y:Int
     val life:Int
+    var isLife: Boolean
 }
