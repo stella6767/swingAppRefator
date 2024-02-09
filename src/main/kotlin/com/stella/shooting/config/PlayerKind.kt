@@ -3,12 +3,25 @@ package com.stella.shooting.config
 import javax.swing.ImageIcon
 
 enum class PlayerKind(
-    val playIcon: ImageIcon,
-    val bigPlayIcon: ImageIcon,
-    val detailIcon: ImageIcon,
+    val playIcon: String, // 플레이어 기체 이미지
+    val bigPlayIcon: String,// 버튼 누를시 커지는 이미지
+    val detailIcon: String, // 기체 상세설명 이미지
 
-) {
-    PLANE1(ImageIcon("images/PlayerPlane1.png"), ImageIcon("images/BigPlane1.png"), ImageIcon("images/PlaneDetailImg1.png")),
-    PLANE2(ImageIcon("images/PlayerPlane2.png"), ImageIcon("images/BigPlane2.png"), ImageIcon("images/PlaneDetailImg2.png")),
-    PLANE3(ImageIcon("images/PlayerPlane3.png"), ImageIcon("images/BigPlane3.png"), ImageIcon("images/PlaneDetailImg3.png"))
+    ) {
+    PLANE1(
+        "/images/PlayerPlane1.png",
+        "/images/BigPlane1.png",
+        "/images/PlaneDetailImg1.png"
+    ),
+    PLANE2(
+        "/images/PlayerPlane2.png",
+        "/images/BigPlane2.png",
+        "/images/PlaneDetailImg2.png",
+    ),
+
+    PLANE3(
+        "/images/PlayerPlane3.png",
+        "/images/BigPlane3.png",
+        "/images/PlaneDetailImg3.png"
+    )
 }

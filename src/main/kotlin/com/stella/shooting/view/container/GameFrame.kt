@@ -4,6 +4,8 @@ import com.stella.shooting.config.GAME_TITLE
 import com.stella.shooting.config.PanelName
 import com.stella.shooting.config.SCREEN_HEIGHT
 import com.stella.shooting.config.SCREEN_WIDTH
+import java.awt.event.KeyAdapter
+import java.awt.event.KeyEvent
 import javax.swing.JFrame
 import javax.swing.JPanel
 
@@ -12,6 +14,7 @@ class GameFrame : JFrame(
 ) {
 
     private lateinit var jPanel: JPanel
+
     init {
         init()
         setting()
@@ -35,16 +38,16 @@ class GameFrame : JFrame(
 
         when (panelName) {
             PanelName.INITTITLE -> {
-                jPanel = InitPanel()
+                jPanel = InitPanel(this)
                 contentPane.removeAll()
                 contentPane.add(jPanel)
                 revalidate()
                 repaint()
             }
             PanelName.SELECTAPI -> {
-                val selectPanel = SelectPanel(this)
+                jPanel = SelectPanel(this)
                 contentPane.removeAll()
-                contentPane.add(selectPanel)
+                contentPane.add(jPanel)
                 revalidate()
                 repaint()
             }
