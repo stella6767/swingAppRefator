@@ -13,9 +13,6 @@ import javax.swing.SwingUtilities
 class Config {
     @Bean
     fun swingingSpring() : ApplicationRunner {
-
-        println("cool~~~")
-
         return ApplicationRunner {
             it.run {
                 SwingUtilities.invokeLater {
