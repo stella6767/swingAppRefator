@@ -138,7 +138,7 @@ class GamePanel(
 //            boss.bossUpdate(g)
 //        }
 
-        repaint()
+        //repaint()
     }
 
 

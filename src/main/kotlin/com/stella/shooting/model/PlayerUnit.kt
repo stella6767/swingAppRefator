@@ -45,18 +45,32 @@ class PlayerUnit(
 
     fun keyProcess() {
         move()
-        if (isAttack) {
+
+        if (!isInvincible && isAttack && pCount % 30 == 0) {
+            //ThreadSleep 대신 pCount로 이 함수에 약간의 텀을 줌.
             val bullet = PlayerBullet(
                 kind.bulletImg.toImageIcon(this::class.java).image,
                 (x + 20).toDouble(), (y - 40).toDouble(), 90.0, 2.0
             )
+            println("총알 장전" + this.pCount)
             bullets.add(bullet)
+
+            if (this.pCount == 3150) this.pCount = 0 //초기화
         }
+
+        this.pCount ++
+
+
+
     }
 
     fun playerAttackProcess() {
+
         for (bullet in bullets) {
+
             bullet.fire()
+
+
         }
     }
 

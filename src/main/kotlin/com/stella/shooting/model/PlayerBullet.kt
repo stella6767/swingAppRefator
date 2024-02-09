@@ -28,9 +28,9 @@ class PlayerBullet(
             }
             Thread.sleep(10)
             if (x > 1000 || x < -500 || y < -100 || y > 1000) {
-                // System.out.println("bullet thread terminate");
                 // map 바깥으로 나가면
                 isLife = false
+                //System.out.println(Thread.currentThread().name + "  총알이 죽었습니다");
             }
         }
     }
@@ -39,6 +39,9 @@ class PlayerBullet(
         x -= cos(Math.toRadians(this.angel)) * speed
         y -= sin(Math.toRadians(this.angel)) * speed
     }
+
+
+
 
 
 //    fun crash() { // 플레이어 총알이 보스에 부딪쳤을 시 충돌연산
