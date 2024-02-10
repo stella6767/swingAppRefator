@@ -98,10 +98,8 @@ class PlayerUnit(
 
 
     fun respon(){
-
         this.x =200
         this.y = 600
-
     }
 
 

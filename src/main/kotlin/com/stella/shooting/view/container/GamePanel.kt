@@ -93,12 +93,10 @@ class GamePanel(
 
 
     private fun lifeCounting() {
-        if (player.life == 2) {
-            lifeCountLabel3.isVisible = false
-        } else if (player.life === 1) {
-            lifeCountLabel2.isVisible = false
-        } else {
-            lifeCountLabel1.isVisible = false
+        when (player.life) {
+            2 -> lifeCountLabel3.isVisible = false
+            1 -> lifeCountLabel2.isVisible = false
+            0 -> lifeCountLabel1.isVisible = false
         }
         repaint()
     }

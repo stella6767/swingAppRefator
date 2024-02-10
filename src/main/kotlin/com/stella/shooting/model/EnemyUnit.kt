@@ -16,7 +16,7 @@ class EnemyUnit(
 
 
     var isCollision: Boolean = false
-    override val life: Int = kind.life
+    override var life: Int = kind.life
     var image: ImageIcon = kind.icon.toImageIcon(this::class.java)
 
 
@@ -27,8 +27,10 @@ class EnemyUnit(
 
 
     fun explosion(image: ImageIcon){
-        if (this.isCollision){
+        if (this.isCollision || this.life < 1){
             this.image = image
+            this.isLife = false
+            Thread.sleep(500)
             this.y = 1000 // 맵 바깥으로 적 던짐
         }
     }

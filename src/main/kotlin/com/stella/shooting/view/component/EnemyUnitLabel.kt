@@ -1,10 +1,9 @@
 package com.stella.shooting.view.component
 
 import com.stella.shooting.config.toImageIcon
+import com.stella.shooting.model.Bullet
 import com.stella.shooting.model.EnemyUnit
-import com.stella.shooting.model.PlayerUnit
 import java.awt.Graphics
-import javax.swing.ImageIcon
 import javax.swing.JLabel
 import kotlin.math.abs
 
@@ -25,49 +24,22 @@ class EnemyUnitLabel(
     override fun run() {
 
         while (enemy.isLife) {
+
+            enemy.explosion(explosionIcon)
+
             Thread.sleep(10)
             setLocation(enemy.x, enemy.y)
             enemy.move()
             if (enemy.y > 900) {
-                println("enemy1MoveThread 종료")
+                println(Thread.currentThread().name + " terminated")
                 enemy.isLife = false
             }
 
             crushToPlayer()
-
-
+            crushBullet()
         }
 
     }
-
-
-//    fun crush() { // 적비행기-Player 충돌
-//
-//
-//        while (!player.isInvincible() && y < 900) {
-//
-//            if (Math.abs((player.getX() + player.getWidth() / 2) - (x + player.getWidth() / 2)) < (width / 2
-//                        + player.getWidth() / 2)
-//                && Math.abs((player.getY() + player.getHeight() / 2) - (y + height / 2)) < (height / 2
-//                        + player.getHeight() / 2)
-//            ) {
-//                collision = true
-//            } else {
-//                collision = false
-//            }
-//
-//
-//            if (collision) {
-//                explosePlayer(player, enemy1) // 플레이어와 적기 충돌시
-//            }
-//
-//            if (crushCheck) {
-//                explosePlayer(enemy1) // 플레이어 총알이 적기 충돌시
-//            }
-//            Thread.sleep(10)
-//
-//        }
-//    }
 
 
     private fun crushToPlayer() {
@@ -81,13 +53,11 @@ class EnemyUnitLabel(
         ) {
             println("충돌 확인")
 
-            //Thread.sleep을 플레이어에게 걸면 안 되니 임시방편 여기로
+            //Player에게 Thread.sleep을 걸면 안 되니 임시방편 여기로
             val player = playerLabel.player
 
             player.isCollision = true
             enemy.isCollision = true
-
-            enemy.explosion(explosionIcon)
 
 
             if (player.isCollision) {
@@ -109,6 +79,58 @@ class EnemyUnitLabel(
 
             repaint()
         }
+    }
+
+
+    private fun crushBullet(){
+        val bullets = playerLabel.player.bullets
+        for (bullet in bullets) {
+            crushToPlayerBullet(bullet)
+        }
+    }
+
+    private fun crushToPlayerBullet(bullet: Bullet) { // 적기가 아군총알에 충돌시 구현,
+
+//        enemy.image = explosionIcon
+//        println("적기와 아군비행기 총알 충돌")
+//        Thread.sleep(1000)
+//        enemyUnit.y = 1000 // Thread 강제종료 방법이 마땅히 안 떠오름 대충 이렇게
+//        enemyUnit.repaint()
+
+        val isCrash = crash(
+            bullet.x.toInt(), bullet.y.toInt(),
+            enemy.x, enemy.y,
+            bullet.width, bullet.height,
+            enemy.width, enemy.height
+        )
+
+        if (isCrash && (enemy.life > 0)) {
+            //playerBullets.removeAt(i) // 충돌판정이 맞으면, 총알 사라지고 적의 체력이 1 깍임
+            //i = i - 1 // 인덱스 에러해결하기 위해
+            //enemyUnitList.get(j).setLife(enemyUnitList.get(j).getLife() - 1)
+            enemy.life--
+            println("적 hp==>${enemy.life}")
+
+        }
+
+
+    }
+
+
+    // 플레이어 총알이 적의 비행기에 닿았는지 탐지하는 연산
+    private fun crash(
+        x1: Int, y1: Int,
+        x2: Int, y2: Int,
+        w1: Int, h1: Int,
+        w2: Int, h2: Int
+    ): Boolean {
+
+        // x,y : 위치값 , w,h : 이미지의 높이와 길이.
+
+        val result = (abs(((x1 + w1 / 2) - (x2 + w2 / 2)).toDouble()) < (w2 / 2 + w1 / 2)
+                && abs(((y1 + h1 / 2) - (y2 + h2 / 2)).toDouble()) < (h2 / 2 + h1 / 2))
+
+        return result
     }
 
 
