@@ -43,8 +43,8 @@ class EnemyUnit(
     fun fire() {
 
         for (bullet in bullets) {
-            println("fire  " + "  ${kind.name}")
-            bullet.fire()
+            //println("fire  " + "  ${kind.name}")
+            //bullet.fire()
         }
 
     }
@@ -56,7 +56,7 @@ class EnemyUnit(
                 x + 20.0, y + 40.0,
                 300.0, 2.0,
                 30, 30,
-                kind.bulletImg.toImageIcon(this::class.java).image
+                kind.bulletImg.toImageIcon(this::class.java)
             )
             bullets.add(bullet)
         }

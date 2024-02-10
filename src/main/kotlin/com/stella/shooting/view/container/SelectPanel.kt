@@ -69,8 +69,7 @@ class SelectPanel(
     ) = object : MouseAdapter() {
 
         override fun mousePressed(e: MouseEvent) {
-            val player = createPlayer(playerKind)
-            gameFrame.change(panelName, player)
+            gameFrame.change(panelName, playerKind)
         }
 
         override fun mouseEntered(e: MouseEvent) {
@@ -92,8 +91,5 @@ class SelectPanel(
         repaint()
     }
 
-    private fun createPlayer(playerKind: PlayerKind): PlayerLabel { // 비행기 선택 후 비행기 new add
-        return PlayerLabel(PlayerUnit(playerKind))
-    }
 
 }

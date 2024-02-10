@@ -2,8 +2,10 @@ package com.stella.shooting.view.container
 
 import com.stella.shooting.config.EnemyKind
 import com.stella.shooting.config.PanelName
+import com.stella.shooting.config.PlayerKind
 import com.stella.shooting.config.toImageIcon
 import com.stella.shooting.model.EnemyUnit
+import com.stella.shooting.model.PlayerUnit
 import com.stella.shooting.view.component.EnemyUnitLabel
 import com.stella.shooting.view.component.PlayerLabel
 import java.awt.Graphics
@@ -15,9 +17,10 @@ import javax.swing.JPanel
 
 class GamePanel(
     private val gameFrame: GameFrame,
-    private val playerLabel: PlayerLabel
+    private val playerKind: PlayerKind,
 ) : JPanel(), Runnable {
 
+    private val playerLabel = createPlayer(playerKind)
     private val player = playerLabel.player
 
     private var isPlaying: Boolean = true // 게임실행 여부
@@ -40,7 +43,7 @@ class GamePanel(
 
 
     init {
-        this.add(playerLabel)
+        add(playerLabel)
         keyListener()
     }
 
@@ -121,10 +124,13 @@ class GamePanel(
         g.drawImage(bossStageImg, 0, bossStageBY1, null)
         g.drawImage(bossStageImg, 0, bossStageBY2, null)
 
-        for (enemy in enemys) {
-            enemy.drawEnemy(g)
-        }
+//        for (playerBullet in playerLabel.player.bullets) {
+//            playerBullet.paint(g)
+//        }
 
+        for (enemy in enemys) {
+            enemy.paints(g)
+        }
         //boss.bossUpdate(g)
     }
 
@@ -154,6 +160,10 @@ class GamePanel(
                 }
             }
         })
+    }
+
+    private fun createPlayer(playerKind: PlayerKind): PlayerLabel { // 비행기 선택 후 비행기 new add
+        return PlayerLabel(PlayerUnit(playerKind), this)
     }
 
 }

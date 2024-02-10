@@ -1,6 +1,7 @@
 package com.stella.shooting.model
 
 import java.awt.Image
+import javax.swing.ImageIcon
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -14,7 +15,7 @@ interface Bullet {
     var height: Int
     var isLife: Boolean
     val isCollision: Boolean //충돌여부
-    val image: Image
+    val image: ImageIcon
 
     fun fire()
     fun move()

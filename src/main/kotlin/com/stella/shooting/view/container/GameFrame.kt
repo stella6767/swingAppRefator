@@ -1,9 +1,6 @@
 package com.stella.shooting.view.container
 
-import com.stella.shooting.config.GAME_TITLE
-import com.stella.shooting.config.PanelName
-import com.stella.shooting.config.SCREEN_HEIGHT
-import com.stella.shooting.config.SCREEN_WIDTH
+import com.stella.shooting.config.*
 import com.stella.shooting.view.component.PlayerLabel
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
@@ -34,13 +31,13 @@ class GameFrame : JFrame(
     // 패널 바꾸기 함수
     fun change(
         panelName: PanelName,
-        playerLabel: PlayerLabel? = null
+        playerKind: PlayerKind? = null
     ) {
         //약간 찝찝하긴 한데..
         val panel = when (panelName) {
             PanelName.INITTITLE -> InitPanel(this)
             PanelName.SELECTAPI -> SelectPanel(this)
-            PanelName.INGAME -> GamePanel(this, playerLabel ?: throw  IllegalArgumentException("cant find player"))
+            PanelName.INGAME -> GamePanel(this, playerKind ?: throw  IllegalArgumentException("cant find player"))
         }
 
         contentPane.removeAll()

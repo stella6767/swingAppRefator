@@ -1,11 +1,13 @@
 package com.stella.shooting.model
 
+import java.awt.Graphics
 import java.awt.Image
+import javax.swing.ImageIcon
 import kotlin.math.cos
 import kotlin.math.sin
 
 class PlayerBullet(
-    override val image: Image,
+    override val image: ImageIcon,
     override var x: Double,
     override var y: Double,
     override var angel: Double,
@@ -16,34 +18,30 @@ class PlayerBullet(
     override val isCollision: Boolean = false,
 ) : Bullet {
 
-
-
-
     override fun move() {
-        while (isLife) {
-            if (isCollision) {
-                y = (-100).toDouble()
-            }
 
-            Thread.sleep(10)
-
-            x -= cos(Math.toRadians(this.angel)) * speed
-            y -= sin(Math.toRadians(this.angel)) * speed
-
-            if (x > 1000 || x < -500 || y < -100 || y > 1000) {
-                // map 바깥으로 나가면
-                isLife = false
-            }
+        if (isCollision) {
+            y = (-100).toDouble()
         }
+
+        Thread.sleep(10)
+
+        x -= cos(Math.toRadians(this.angel)) * speed
+        y -= sin(Math.toRadians(this.angel)) * speed
+
+
+
+
+        if (x > 1000 || x < -500 || y < -100 || y > 1000) {
+            // map 바깥으로 나가면
+            isLife = false
+        }
+
     }
 
     override fun fire() {
 
-        println("????")
-        //Thread.sleep(500)
     }
-
-
 
 
 //    fun crash() { // 플레이어 총알이 보스에 부딪쳤을 시 충돌연산

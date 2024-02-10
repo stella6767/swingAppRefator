@@ -119,11 +119,11 @@ class EnemyUnitLabel(
     }
 
 
-    fun drawEnemy(g: Graphics) {
+    fun paints(g: Graphics) {
         g.drawImage(enemy.image.image, enemy.x, enemy.y, enemy.width, enemy.height, null)
         for (bullet in enemy.bullets) {
             g.drawImage(
-                bullet.image, bullet.x.toInt(), bullet.y.toInt(), bullet.width,
+                bullet.image.image, bullet.x.toInt(), bullet.y.toInt(), bullet.width,
                 bullet.height, null
             )
         }

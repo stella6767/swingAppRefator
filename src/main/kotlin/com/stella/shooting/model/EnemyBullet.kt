@@ -1,6 +1,7 @@
 package com.stella.shooting.model
 
 import java.awt.Image
+import javax.swing.ImageIcon
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
@@ -12,7 +13,7 @@ class EnemyBullet(
     override var speed: Double,
     override var width: Int,
     override var height: Int,
-    override val image: Image,
+    override val image: ImageIcon,
     override var isLife: Boolean = true,
     override var isCollision: Boolean = false,
 ) : Bullet, Runnable {
