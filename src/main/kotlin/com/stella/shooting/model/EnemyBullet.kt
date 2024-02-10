@@ -43,7 +43,7 @@ class EnemyBullet(
     }
 
 
-    fun crashToPlayer() { // 적 총알이 아군 비행기에 부딪쳤을 시 충돌연산
+    private fun crashToPlayer() { // 적 총알이 아군 비행기에 부딪쳤을 시 충돌연산
         if (!player.isInvincible) {
             isCollision = (abs(((player.x - 11) + player.width / 3) - (x + width / 3)) < (width / 3 + player.width / 3)
                     && abs(((player.y - 5) + player.height / 3) - (y + height / 3)) < (height / 3 + player.height / 3))

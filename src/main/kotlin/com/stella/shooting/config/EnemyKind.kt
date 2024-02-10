@@ -113,4 +113,17 @@ enum class EnemyKind(
         250
     ),
 
+    BOSS(
+        "/images/boss3.gif",
+        500,
+        { enemy: EnemyUnit ->
+
+        },
+        "/images/bullet1.png",
+        20,
+        600,
+        500
+    ),
+
+
 }

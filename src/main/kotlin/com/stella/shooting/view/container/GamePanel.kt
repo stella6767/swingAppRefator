@@ -4,8 +4,11 @@ import com.stella.shooting.config.EnemyKind
 import com.stella.shooting.config.PanelName
 import com.stella.shooting.config.PlayerKind
 import com.stella.shooting.config.toImageIcon
+import com.stella.shooting.model.BossUnit
 import com.stella.shooting.model.EnemyUnit
 import com.stella.shooting.model.PlayerUnit
+import com.stella.shooting.view.component.BossUnitLabel
+
 import com.stella.shooting.view.component.EnemyUnitLabel
 import com.stella.shooting.view.component.PlayerLabel
 import java.awt.Graphics
@@ -39,7 +42,7 @@ class GamePanel(
     private val lifeCountLabel3 = JLabel(lifeCount)
 
 
-
+    private var boss: BossUnit? = null
 
 
     init {
@@ -83,7 +86,7 @@ class GamePanel(
 
             appear++
             repaint()
-            Thread.sleep(10)
+            Thread.sleep(5)
         }
     }
 
@@ -99,29 +102,39 @@ class GamePanel(
 
 
     private fun batchEnemy() { // 적기 맵에 배치
-        if (appear == 500 || appear == 1500 || appear == 2500) {
-            EnemyUnitLabel(EnemyUnit(50, 0, EnemyKind.Enemy1), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(100, -50, EnemyKind.Enemy1), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(150, -100, EnemyKind.Enemy1), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(200, -150, EnemyKind.Enemy1), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(250, -200, EnemyKind.Enemy1), playerLabel, this)
-        }
-        if (appear == 5000) {
-            EnemyUnitLabel(EnemyUnit(-100, 300, EnemyKind.Enemy2), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(500, 300, EnemyKind.Enemy2), playerLabel, this)
-        }
-
+//        if (appear == 500 || appear == 1500 || appear == 2500) {
+//            EnemyUnitLabel(EnemyUnit(50, 0, EnemyKind.Enemy1), playerLabel, this)
+//            EnemyUnitLabel(EnemyUnit(100, -50, EnemyKind.Enemy1), playerLabel, this)
+//            EnemyUnitLabel(EnemyUnit(150, -100, EnemyKind.Enemy1), playerLabel, this)
+//            EnemyUnitLabel(EnemyUnit(200, -150, EnemyKind.Enemy1), playerLabel, this)
+//            EnemyUnitLabel(EnemyUnit(250, -200, EnemyKind.Enemy1), playerLabel, this)
+//        }
+//        if (appear == 5000) {
+//            EnemyUnitLabel(EnemyUnit(-100, 300, EnemyKind.Enemy2), playerLabel, this)
+//            EnemyUnitLabel(EnemyUnit(500, 300, EnemyKind.Enemy2), playerLabel, this)
+//        }
+//
         if (appear == 500 || appear == 1500 || appear == 3500 || appear == 5000 || appear == 6000) {
             EnemyUnitLabel(EnemyUnit(600, -200, EnemyKind.Enemy3), playerLabel, this)
             EnemyUnitLabel(EnemyUnit(0, 0, EnemyKind.Enemy4), playerLabel, this)
         }
-        if (appear == 6000) {
-            EnemyUnitLabel(EnemyUnit(300, -50, EnemyKind.Enemy5), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(500, -50, EnemyKind.Enemy5), playerLabel, this)
-        }
+//        if (appear == 6000) {
+//            EnemyUnitLabel(EnemyUnit(300, -50, EnemyKind.Enemy5), playerLabel, this)
+//            EnemyUnitLabel(EnemyUnit(500, -50, EnemyKind.Enemy5), playerLabel, this)
+//        }
+//
+//        if (appear == 7000) {
+//            EnemyUnitLabel(EnemyUnit(650, 400, EnemyKind.Enemy6), playerLabel, this)
+//        }
 
-        if (appear == 7000) {
-            EnemyUnitLabel(EnemyUnit(650, 400, EnemyKind.Enemy6), playerLabel, this)
+//        if (appear == 10000) {
+//            BossUnitLabel(BossUnit(0, -300, playerLabel), this)
+//        }
+
+        if (appear == 500) {
+            //EnemyUnitLabel(EnemyUnit(0, 0, EnemyKind.BOSS), playerLabel, this)
+            BossUnitLabel(BossUnit(0, -200, playerLabel, gamePanel = this), this)
+            //boss = BossUnit(0, -100, playerLabel, gamePanel = this)
         }
 
     }
@@ -133,6 +146,7 @@ class GamePanel(
         g.drawImage(bossStageImg, 0, bossStageBY1, null)
         g.drawImage(bossStageImg, 0, bossStageBY2, null)
 
+        //boss?.customPaint(g)
     }
 
 

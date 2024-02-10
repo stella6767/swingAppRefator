@@ -5,6 +5,7 @@ import com.stella.shooting.config.toImageIcon
 
 import com.stella.shooting.model.EnemyUnit
 import com.stella.shooting.view.container.GamePanel
+import java.awt.Color
 import java.awt.Image
 import javax.swing.ImageIcon
 import javax.swing.JLabel
@@ -16,12 +17,10 @@ class EnemyUnitLabel(
     val gamePanel: GamePanel,
 ) : JLabel(), Runnable, SwingComponentBehavior {
 
-    private val explosionIcon =
-        "/images/explosion.gif".toImageIcon(this::class.java)
+    private val explosionIcon = "/images/explosion.gif".toImageIcon(this::class.java)
 
     init {
         icon = enemy.image
-
         gamePanel.add(this)
         val thread = Thread(this)
         thread.name = enemy.kind.name + this.hashCode()
@@ -34,7 +33,6 @@ class EnemyUnitLabel(
             Thread.sleep(10)
             explosion()
             enemy.move()
-
             setComponent()
 
             if (enemy.y > 900) {
@@ -42,9 +40,7 @@ class EnemyUnitLabel(
                 enemy.isLife = false
             }
 
-            enemy.createBullets(gamePanel, playerLabel)
-
-
+            enemy.createBulletsByKind(gamePanel, playerLabel)
             crushToPlayer()
             crushToPlayerBullet()
         }
