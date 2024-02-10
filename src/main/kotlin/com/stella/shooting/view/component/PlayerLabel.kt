@@ -12,8 +12,6 @@ class PlayerLabel(
     val gamePanel: GamePanel
 ) : JLabel(), Runnable, SwingComponentBehavior {
 
-    private val explosionIcon = "/images/explosion.gif".toImageIcon(this::class.java)
-
     init {
         icon = player.icon
         val thread = Thread(this)
@@ -37,25 +35,10 @@ class PlayerLabel(
         setSize(player.width, player.height)
     }
 
-    private fun checkCrush() {
+    private fun crushToEnemyBullet() {
+        //val bullets = playerLabel.player.bullets
 
-        if (player.isCollision) {
-            // 충돌후 이미지 변경 및 목숨카운트
-            setIcon(explosionIcon)
-            player.isInvincible = true
-            Thread.sleep(100)
 
-            setIcon(player.playerInvincibleIcon)
-            //player.life--
-            println("남은 목숨==>${player.life}")
-            player.respon()
-
-            setIcon(player.icon)
-            player.isInvincible = false
-            player.isCollision = false
-
-            repaint()
-        }
     }
 
 

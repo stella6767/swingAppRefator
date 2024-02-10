@@ -2,9 +2,9 @@ package com.stella.shooting.view.component
 
 import com.stella.shooting.config.SwingComponentBehavior
 import com.stella.shooting.config.toImageIcon
+
 import com.stella.shooting.model.EnemyUnit
 import com.stella.shooting.view.container.GamePanel
-import java.awt.Graphics
 import java.awt.Image
 import javax.swing.ImageIcon
 import javax.swing.JLabel
@@ -16,15 +16,11 @@ class EnemyUnitLabel(
     val gamePanel: GamePanel,
 ) : JLabel(), Runnable, SwingComponentBehavior {
 
-    private val explosionIcon = "/images/explosion.gif".toImageIcon(this::class.java)
+    private val explosionIcon =
+        "/images/explosion.gif".toImageIcon(this::class.java)
 
     init {
-
-        val image = enemy.image.image
-        val changedImg =
-            image.getScaledInstance(enemy.width, enemy.height, Image.SCALE_SMOOTH)
-        val newImageIcon = ImageIcon(changedImg)
-        icon = newImageIcon
+        icon = enemy.image
 
         gamePanel.add(this)
         val thread = Thread(this)
@@ -35,9 +31,8 @@ class EnemyUnitLabel(
     override fun run() {
 
         while (enemy.isLife) {
-
-            enemy.explosion(explosionIcon)
             Thread.sleep(10)
+            explosion()
             enemy.move()
 
             setComponent()
@@ -47,7 +42,8 @@ class EnemyUnitLabel(
                 enemy.isLife = false
             }
 
-            enemy.createBullets(gamePanel)
+            enemy.createBullets(gamePanel, playerLabel)
+
 
             crushToPlayer()
             crushToPlayerBullet()
@@ -68,11 +64,11 @@ class EnemyUnitLabel(
             && abs((playerLabel.y + playerLabel.height / 2) - (y + height / 2)) < (height / 2
                     + playerLabel.height / 2)
             && !playerLabel.player.isInvincible
-
         ) {
             println("충돌 확인")
             //Player에게 Thread.sleep을 걸면 안 되니 임시방편 여기로
             val player = playerLabel.player
+
             player.isCollision = true
             enemy.isCollision = true
 
@@ -80,14 +76,13 @@ class EnemyUnitLabel(
             if (player.isCollision) {
                 // 충돌후 이미지 변경 및 목숨카운트
                 playerLabel.setIcon(explosionIcon)
+                //player.life--
+
                 player.isInvincible = true
                 Thread.sleep(100)
-
                 playerLabel.setIcon(player.playerInvincibleIcon)
-                //player.life--
                 println("남은 목숨==>${player.life}")
                 player.respon()
-                Thread.sleep(1000)
 
                 playerLabel.setIcon(player.icon)
                 player.isInvincible = false
@@ -95,6 +90,19 @@ class EnemyUnitLabel(
             }
 
             repaint()
+        }
+    }
+
+
+    private fun explosion() {
+        if (enemy.isCollision || enemy.life < 1) {
+            println("????")
+            enemy.image = explosionIcon
+            icon = explosionIcon
+            Thread.sleep(50)
+            enemy.y = 1000 // 맵 바깥으로 적 던짐
+            Thread.sleep(50)
+            //enemy.isLife = false
         }
     }
 
@@ -110,11 +118,10 @@ class EnemyUnitLabel(
                 enemy.width, enemy.height
             )
             if (isCrash && (enemy.life > 0)) {
-                //playerBullets.removeAt(i) // 충돌판정이 맞으면, 총알 사라지고 적의 체력이 1 깍임
-                //i = i - 1 // 인덱스 에러해결하기 위해
-                //enemyUnitList.get(j).setLife(enemyUnitList.get(j).getLife() - 1)
+                bullet.bullet.crush()
                 enemy.life--
                 println("적 hp==>${enemy.life}")
+                println(bullets.size)
             }
         }
     }
@@ -133,7 +140,6 @@ class EnemyUnitLabel(
 
         return result
     }
-
 
 
 }

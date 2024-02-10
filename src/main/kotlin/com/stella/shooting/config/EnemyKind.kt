@@ -27,7 +27,7 @@ enum class EnemyKind(
 
     Enemy2(
         "/images/enemy2.png",
-        10,
+        20,
         { enemy: EnemyUnit ->
 
             if (enemy.x < 100) {
@@ -51,7 +51,7 @@ enum class EnemyKind(
 
     Enemy3(
         "/images/enemy3.png",
-        3,
+        5,
         { enemy: EnemyUnit ->
             enemy.y++
             if (enemy.y < 400) {
@@ -66,7 +66,7 @@ enum class EnemyKind(
 
     Enemy4(
         "/images/enemy4.png",
-        3,
+        5,
         { enemy: EnemyUnit ->
             enemy.y++
             if (enemy.y < 400) {
@@ -81,7 +81,7 @@ enum class EnemyKind(
 
     Enemy5(
         "/images/enemy5.png",
-        3,
+        10,
         { enemy: EnemyUnit ->
             enemy.y++
             if (enemy.y < 450) {
@@ -91,14 +91,14 @@ enum class EnemyKind(
             }
         },
         "/images/bullet2.png",
-        50,
+        20,
         150,
         150
     ),
 
     Enemy6(
         "/images/enemy6_2.png",
-        15,
+        30,
         { enemy: EnemyUnit ->
 
             if (enemy.y > 50) {
@@ -108,7 +108,7 @@ enum class EnemyKind(
             }
         },
         "/images/missle.png",
-        50,
+        20,
         250,
         250
     ),

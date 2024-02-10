@@ -39,7 +39,7 @@ class GamePanel(
     private val lifeCountLabel3 = JLabel(lifeCount)
 
 
-    var enemys = (mutableListOf<EnemyUnitLabel>()) // 적 유닛을 모아놓을 배열
+
 
 
     init {
@@ -99,22 +99,31 @@ class GamePanel(
 
 
     private fun batchEnemy() { // 적기 맵에 배치
-        if (appear == 500 || appear == 3000) {
-            enemys.add(EnemyUnitLabel(EnemyUnit(50, 0, EnemyKind.Enemy1), playerLabel, this))
-            enemys.add(EnemyUnitLabel(EnemyUnit(100, -50, EnemyKind.Enemy1), playerLabel, this))
-            enemys.add(EnemyUnitLabel(EnemyUnit(150, -100, EnemyKind.Enemy1), playerLabel, this))
-            enemys.add(EnemyUnitLabel(EnemyUnit(200, -150, EnemyKind.Enemy1), playerLabel, this))
-            enemys.add(EnemyUnitLabel(EnemyUnit(250, -200, EnemyKind.Enemy1), playerLabel, this))
+        if (appear == 500 || appear == 1500 || appear == 2500) {
+            EnemyUnitLabel(EnemyUnit(50, 0, EnemyKind.Enemy1), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(100, -50, EnemyKind.Enemy1), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(150, -100, EnemyKind.Enemy1), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(200, -150, EnemyKind.Enemy1), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(250, -200, EnemyKind.Enemy1), playerLabel, this)
         }
         if (appear == 5000) {
-            enemys.add(EnemyUnitLabel(EnemyUnit(-100, 300, EnemyKind.Enemy2), playerLabel, this))
-            enemys.add(EnemyUnitLabel(EnemyUnit(500, 300, EnemyKind.Enemy2), playerLabel, this))
+            EnemyUnitLabel(EnemyUnit(-100, 300, EnemyKind.Enemy2), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(500, 300, EnemyKind.Enemy2), playerLabel, this)
         }
 
         if (appear == 500 || appear == 1500 || appear == 3500 || appear == 5000 || appear == 6000) {
-            enemys.add(EnemyUnitLabel(EnemyUnit(600, -200, EnemyKind.Enemy3), playerLabel, this))
-            enemys.add(EnemyUnitLabel(EnemyUnit(0, 0, EnemyKind.Enemy4), playerLabel, this))
+            EnemyUnitLabel(EnemyUnit(600, -200, EnemyKind.Enemy3), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(0, 0, EnemyKind.Enemy4), playerLabel, this)
         }
+        if (appear == 6000) {
+            EnemyUnitLabel(EnemyUnit(300, -50, EnemyKind.Enemy5), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(500, -50, EnemyKind.Enemy5), playerLabel, this)
+        }
+
+        if (appear == 7000) {
+            EnemyUnitLabel(EnemyUnit(650, 400, EnemyKind.Enemy6), playerLabel, this)
+        }
+
     }
 
 

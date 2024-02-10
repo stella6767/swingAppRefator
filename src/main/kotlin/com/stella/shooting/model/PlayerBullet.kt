@@ -1,5 +1,6 @@
 package com.stella.shooting.model
 
+import com.stella.shooting.config.toImageIcon
 import java.awt.Graphics
 import java.awt.Image
 import javax.swing.ImageIcon
@@ -18,6 +19,8 @@ class PlayerBullet(
     override val isCollision: Boolean = false,
 ) : Bullet {
 
+    private val explosionIcon = "/images/explosion.gif".toImageIcon(this::class.java)
+
     override fun move() {
 
         if (isCollision) {
@@ -32,26 +35,18 @@ class PlayerBullet(
 
         if (x > 1000 || x < -500 || y < -100 || y > 1000) {
             // map 바깥으로 나가면
+            Thread.sleep(100)
             isLife = false
         }
 
     }
 
-    override fun fire() {
-
+    override fun crush() {
+        this.y = 0.0
     }
 
 
-//    fun crash() { // 플레이어 총알이 보스에 부딪쳤을 시 충돌연산
-//        collision = if (Math.abs(((boss.getX()) + boss.getWidth() / 2) - (x + width / 3)) < (width / 3 + boss.getWidth() / 3)
-//                && Math.abs(((boss.getY()) + boss.getHeight() / 2) - (y + height / 3)) < (height / 3
-//                        + boss.getHeight() / 3)
-//            ) {
-//                true
-//            } else {
-//                false
-//            }
-//    }
+
 
 
 }

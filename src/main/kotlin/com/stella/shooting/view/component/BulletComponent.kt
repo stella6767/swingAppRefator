@@ -2,21 +2,16 @@ package com.stella.shooting.view.component
 
 import com.stella.shooting.config.SwingComponentBehavior
 import com.stella.shooting.model.Bullet
-import com.stella.shooting.model.PlayerBullet
-import java.awt.Graphics
-import javax.swing.JComponent
 import javax.swing.JLabel
-import kotlin.math.cos
-import kotlin.math.sin
 
 class BulletComponent(
-    val bullet: Bullet
+    val bullet: Bullet,
+    val bullets: MutableList<BulletComponent>
 ) : JLabel(), Runnable, SwingComponentBehavior {
 
     init {
         icon = bullet.image
         isVisible = true
-        Thread(this).start()
     }
 
     override fun run() {
@@ -24,6 +19,8 @@ class BulletComponent(
             setComponent()
             bullet.move()
         }
+        bullets.remove(this)
+        //println("지워버리자")
     }
 
     override fun setComponent() {

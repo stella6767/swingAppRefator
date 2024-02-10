@@ -6,7 +6,8 @@ import com.stella.shooting.config.SCREEN_WIDTH
 import com.stella.shooting.config.toImageIcon
 import com.stella.shooting.view.component.BulletComponent
 import com.stella.shooting.view.container.GamePanel
-import java.util.*
+import java.util.concurrent.Executors
+
 
 class PlayerUnit(
     val kind: PlayerKind
@@ -14,8 +15,9 @@ class PlayerUnit(
 
     val icon =
         "/images/Player${kind.name}.png".toImageIcon(this::class.java)// 기본 이미지
+
     val playerInvincibleIcon =
-        "/images/${kind.name}무적.png".toImageIcon(this::class.java) //무적상태시 이미지
+        "/images/${kind.name}무적.png".toImageIcon(this::class.java ) //무적상태시 이미지
 
 
     override val width: Int = 70
@@ -40,7 +42,11 @@ class PlayerUnit(
     private var isWeaponLevelUp: Boolean = false
 
     var bullets =
-        Collections.synchronizedList(mutableListOf<BulletComponent>())
+        mutableListOf<BulletComponent>()
+
+    var executor = Executors.newFixedThreadPool(500)
+    private var virtualExecutor = Executors.newVirtualThreadPerTaskExecutor()
+
 
     fun gameOver() {
         if (life < 1) {
@@ -56,37 +62,45 @@ class PlayerUnit(
     fun fireListner(gamePanel: GamePanel) {
 
         if (!isInvincible && isAttack && pCount % 20 == 0) {
-            //ThreadSleep 대신 pCount로 이 함수에 약간의 텀을 줌.
+            //pCount로 이 함수에 약간의 텀을 줌.
+
             val bullet = PlayerBullet(
-                kind.bulletImg.toImageIcon(this::class.java),
+                kind.bulletImg.toImageIcon(this::class, 20, 20),
                 (x + 15).toDouble(), (y - 40).toDouble(), 90.0, 2.0
             )
             //println("총알 장전" + this.pCount)
-            val bulletComponent = BulletComponent(bullet)
+            val bulletComponent = BulletComponent(bullet, bullets)
             gamePanel.add(bulletComponent)
+//            val thread = Thread(bulletComponent)
+            virtualExecutor.submit(bulletComponent)
             bullets.add(bulletComponent)
+
             if (this.pCount == 3150) this.pCount = 0 //초기화
         }
 
-        this.pCount ++
-    }
 
+
+        this.pCount++
+    }
 
 
     private fun move() {
-        if (isUp) {
+        if (isUp && y>0) {
             y--
         }
-        if (isDown) {
+        if (isDown && y < SCREEN_HEIGHT) {
             y++
         }
-        if (isLeft) {
+        if (isLeft && x > 0) {
             x--
         }
-        if (isRight) {
+        if (isRight && x < SCREEN_WIDTH - 50) {
             x++
         }
     }
+
+
+
 
 
     fun weaponLevelUp(isWeaponLevelUp: Boolean) {
@@ -101,23 +115,13 @@ class PlayerUnit(
     }
 
 
-    fun respon(){
-        this.x =200
+    fun respon() {
+        this.x = 200
         this.y = 600
+        Thread.sleep(1000)
+
     }
 
-    fun checkMap() { // 벽에 충돌하는 조건함수 >> Map 스레드 안에 적용
-        if (x <= 0) {
-            x = 0
-        } else if (x >= 550) {
-            x = 550
-        }
-        if (y <= 0) {
-            y = 0
-        } else if (y >= 720) {
-            y = 720
-        }
-    }
 
 
 }

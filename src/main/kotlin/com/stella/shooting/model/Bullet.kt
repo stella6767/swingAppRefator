@@ -17,7 +17,7 @@ interface Bullet {
     val isCollision: Boolean //충돌여부
     val image: ImageIcon
 
-    fun fire()
+    fun crush()
     fun move()
 
 }

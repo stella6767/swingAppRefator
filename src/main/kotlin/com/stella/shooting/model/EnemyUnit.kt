@@ -3,7 +3,9 @@ package com.stella.shooting.model
 import com.stella.shooting.config.EnemyKind
 import com.stella.shooting.config.toImageIcon
 import com.stella.shooting.view.component.BulletComponent
+import com.stella.shooting.view.component.PlayerLabel
 import com.stella.shooting.view.container.GamePanel
+import java.util.concurrent.Executors
 import javax.swing.ImageIcon
 
 class EnemyUnit(
@@ -17,40 +19,36 @@ class EnemyUnit(
     override val height: Int = kind.height
     var isCollision: Boolean = false
     override var life: Int = kind.life
-    var image: ImageIcon = kind.icon.toImageIcon(this::class.java)
+    var image: ImageIcon = kind.icon.toImageIcon(this::class, kind.width, kind.height)
 
     var bcount: Int = 0 // 총알 장전간격
-    val bullets = mutableListOf<EnemyBullet>()
+    val bullets = mutableListOf<BulletComponent>()
 
-
+    private var virtualExecutor = Executors.newVirtualThreadPerTaskExecutor()
 
 
     fun move() {
         kind.moveFunc(this)
     }
 
-    fun explosion(image: ImageIcon) {
-        if (this.isCollision || this.life < 1) {
-            this.image = image
-            this.isLife = false
-            Thread.sleep(500)
-            this.y = 1000 // 맵 바깥으로 적 던짐
-        }
-    }
 
 
-    fun createBullets(gamePanel: GamePanel) {
+    fun createBullets(gamePanel: GamePanel, playerLabel: PlayerLabel) {
 
         if (kind.bulletImg != "" && ((bcount % kind.bulletInterval) == 0) ) {
+
             val bullet = EnemyBullet(
                 x + 20.0, y + 40.0,
                 300.0, 2.0,
                 15, 20,
-                kind.bulletImg.toImageIcon(this::class.java)
+                kind.bulletImg.toImageIcon(this::class, kind.width, kind.height),
+                playerLabel = playerLabel
             )
-            val bulletComponent = BulletComponent(bullet)
+
+            val bulletComponent = BulletComponent(bullet, bullets)
             gamePanel.add(bulletComponent)
-            bullets.add(bullet)
+            virtualExecutor.submit(bulletComponent)
+            bullets.add(bulletComponent)
             if (bcount == 5000) bcount = 0
         }
 
