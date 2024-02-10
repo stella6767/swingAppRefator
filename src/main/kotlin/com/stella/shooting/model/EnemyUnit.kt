@@ -1,22 +1,36 @@
 package com.stella.shooting.model
 
+import com.stella.shooting.config.EnemyKind
+import com.stella.shooting.config.toImageIcon
 import java.awt.Image
 import javax.swing.ImageIcon
 
 class EnemyUnit(
-    override val x: Int,
+    override var x: Int,
     override var y: Int,
     override val width: Int,
     override val height: Int,
-    var image: ImageIcon,
-    override val life: Int = 1,
+    val kind: EnemyKind,
     override var isLife: Boolean = true,
 ) : Unit {
 
 
-    val isCollision: Boolean = false
+    var isCollision: Boolean = false
+    override val life: Int = kind.life
+    var image: ImageIcon = kind.icon.toImageIcon(this::class.java)
+
+
+
     fun move() {
-        y++
+        kind.moveFunc(this)
+    }
+
+
+    fun explosion(image: ImageIcon){
+        if (this.isCollision){
+            this.image = image
+            this.y = 1000 // 맵 바깥으로 적 던짐
+        }
     }
 
 

@@ -1,5 +1,6 @@
 package com.stella.shooting.view.container
 
+import com.stella.shooting.config.EnemyKind
 import com.stella.shooting.config.PanelName
 import com.stella.shooting.config.toImageIcon
 import com.stella.shooting.model.EnemyUnit
@@ -104,33 +105,22 @@ class GamePanel(
 
 
     private fun batchEnemy() { // 적기 맵에 배치
-
-        if (appear == 1000 || appear == 3000) {
-
-            val image = "/images/enemy1.png".toImageIcon(this::class.java)
-            enemys.add(EnemyUnitLabel(EnemyUnit(50, 0, 50, 50, image)))
-            enemys.add(EnemyUnitLabel(EnemyUnit(100, -50, 50, 50, image)))
-            enemys.add(EnemyUnitLabel(EnemyUnit(150, -100, 50, 50, image)))
-            enemys.add(EnemyUnitLabel(EnemyUnit(200, -150, 50, 50, image)))
-            enemys.add(EnemyUnitLabel(EnemyUnit(250, -200, 50, 50, image)))
+        if (appear == 500 || appear == 3000) {
+            enemys.add(EnemyUnitLabel(EnemyUnit(50, 0, 50, 50, EnemyKind.Enemy1), playerLabel))
+            enemys.add(EnemyUnitLabel(EnemyUnit(100, -50, 50, 50, EnemyKind.Enemy1), playerLabel))
+            enemys.add(EnemyUnitLabel(EnemyUnit(150, -100, 50, 50, EnemyKind.Enemy1), playerLabel))
+            enemys.add(EnemyUnitLabel(EnemyUnit(200, -150, 50, 50, EnemyKind.Enemy1), playerLabel))
+            enemys.add(EnemyUnitLabel(EnemyUnit(250, -200, 50, 50, EnemyKind.Enemy1), playerLabel))
+        }
+        if (appear == 5000) {
+            enemys.add(EnemyUnitLabel(EnemyUnit(-100, 300, 150, 150, EnemyKind.Enemy2), playerLabel))
+            enemys.add(EnemyUnitLabel(EnemyUnit(500, 300, 150, 150, EnemyKind.Enemy2), playerLabel))
         }
 
-    }
-
-    private fun checkCrush(enemy: EnemyUnitLabel) { // 적기 출돌판정
-
-        if (abs((playerLabel.x + playerLabel.width / 2) - (x + playerLabel.width / 2)) < (width / 2
-                    + playerLabel.width / 2)
-            && abs((playerLabel.y + playerLabel.height / 2) - (y + height / 2)) < (height / 2
-                    + playerLabel.height / 2)
-            && !player.isInvincible
-
-        ) {
-            player.isCollision = true
-            enemy.crushToPlayer()
+        if (appear == 500 || appear == 1500 || appear == 3500 || appear == 5000 || appear == 6000) {
+            enemys.add(EnemyUnitLabel(EnemyUnit(600, -200, 100, 100, EnemyKind.Enemy3), playerLabel))
+            enemys.add(EnemyUnitLabel(EnemyUnit(0, 0, 100, 100, EnemyKind.Enemy4), playerLabel))
         }
-
-
     }
 
 
@@ -144,7 +134,6 @@ class GamePanel(
         for (enemy in enemys) {
             enemy.enemyDraw(g)
         }
-
         //boss.bossUpdate(g)
     }
 

@@ -100,8 +100,8 @@ class PlayerUnit(
     fun respon(){
 
         this.x =200
-        this.y = 520
-        Thread.sleep(500)
+        this.y = 600
+
     }
 
 

@@ -6,18 +6,19 @@ import com.stella.shooting.model.PlayerUnit
 import java.awt.Graphics
 import javax.swing.ImageIcon
 import javax.swing.JLabel
+import kotlin.math.abs
 
 class EnemyUnitLabel(
-    private val enemy: EnemyUnit
+    private val enemy: EnemyUnit,
+    private val playerLabel: PlayerLabel,
 ) : JLabel(), Runnable {
 
     private val explosionIcon = "/images/explosion.gif".toImageIcon(this::class.java)
+
     init {
-
         icon = enemy.image
-
         val thread = Thread(this)
-        thread.name = "enemy"
+        thread.name = enemy.kind.name + this.hashCode()
         thread.start()
     }
 
@@ -31,6 +32,10 @@ class EnemyUnitLabel(
                 println("enemy1MoveThread 종료")
                 enemy.isLife = false
             }
+
+            crushToPlayer()
+
+
         }
 
     }
@@ -62,14 +67,48 @@ class EnemyUnitLabel(
 //            Thread.sleep(10)
 //
 //        }
-//
-//
 //    }
 
 
-    fun crushToPlayer() {
-        enemy.image = explosionIcon
-        enemy.y = 1000 // 맵 바깥으로 적 던짐
+    private fun crushToPlayer() {
+
+        if (abs((playerLabel.x + playerLabel.width / 2) - (x + playerLabel.width / 2)) < (width / 2
+                    + playerLabel.width / 2)
+            && abs((playerLabel.y + playerLabel.height / 2) - (y + height / 2)) < (height / 2
+                    + playerLabel.height / 2)
+            && !playerLabel.player.isInvincible
+
+        ) {
+            println("충돌 확인")
+
+            //Thread.sleep을 플레이어에게 걸면 안 되니 임시방편 여기로
+            val player = playerLabel.player
+
+            player.isCollision = true
+            enemy.isCollision = true
+
+            enemy.explosion(explosionIcon)
+
+
+            if (player.isCollision) {
+                // 충돌후 이미지 변경 및 목숨카운트
+                playerLabel.setIcon(explosionIcon)
+                player.isInvincible = true
+                Thread.sleep(100)
+
+                playerLabel.setIcon(player.playerInvincibleIcon)
+                //player.life--
+                println("남은 목숨==>${player.life}")
+                player.respon()
+                Thread.sleep(1000)
+
+                playerLabel.setIcon(player.icon)
+                player.isInvincible = false
+                player.isCollision = false
+            }
+
+            repaint()
+        }
     }
 
 

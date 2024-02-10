@@ -22,7 +22,7 @@ class PlayerLabel(
             player.gameOver()
             player.keyProcess()
             player.playerAttackProcess()
-            checkCrush()
+
 
 //            PlayerBullet()
             setLocation(player.x, player.y) // repaint()
@@ -35,18 +35,18 @@ class PlayerLabel(
 
         if (player.isCollision) {
             // 충돌후 이미지 변경 및 목숨카운트
-            icon = explosionIcon
+            setIcon(explosionIcon)
             player.isInvincible = true
+            Thread.sleep(100)
+
             setIcon(player.playerInvincibleIcon)
-            player.life--
-            Thread.sleep(500)
+            //player.life--
+            println("남은 목숨==>${player.life}")
+            player.respon()
+
 
             setIcon(player.icon)
-            player.x = 200
-            player.y = 520
-            Thread.sleep(500)
             player.isInvincible = false
-
             player.isCollision = false
 
             repaint()
