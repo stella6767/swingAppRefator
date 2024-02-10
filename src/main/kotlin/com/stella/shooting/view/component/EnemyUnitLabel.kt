@@ -121,7 +121,7 @@ class EnemyUnitLabel(
             if (isCrash && (enemy.life > 0)) {
                 bullet.bullet.crush()
                 enemy.life--
-                println("적 hp==>${enemy.life}")
+                //println("적 hp==>${enemy.life}")
                 println(bullets.size)
             }
         }
