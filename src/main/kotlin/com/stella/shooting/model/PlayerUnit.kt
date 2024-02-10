@@ -6,6 +6,7 @@ import com.stella.shooting.config.SCREEN_WIDTH
 import com.stella.shooting.config.toImageIcon
 import com.stella.shooting.view.component.BulletComponent
 import com.stella.shooting.view.container.GamePanel
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
 
@@ -17,7 +18,7 @@ class PlayerUnit(
         "/images/Player${kind.name}.png".toImageIcon(this::class.java)// 기본 이미지
 
     val playerInvincibleIcon =
-        "/images/${kind.name}무적.png".toImageIcon(this::class.java ) //무적상태시 이미지
+        "/images/${kind.name}무적.png".toImageIcon(this::class.java) //무적상태시 이미지
 
 
     override val width: Int = 70
@@ -42,17 +43,12 @@ class PlayerUnit(
     private var isWeaponLevelUp: Boolean = false
 
     var bullets =
-        mutableListOf<BulletComponent>()
+        CopyOnWriteArrayList<BulletComponent>()
 
     var executor = Executors.newFixedThreadPool(500)
     private var virtualExecutor = Executors.newVirtualThreadPerTaskExecutor()
 
 
-    fun gameOver() {
-        if (life < 1) {
-            isLife = false
-        }
-    }
 
     fun keyProcess() {
         move()
@@ -64,16 +60,21 @@ class PlayerUnit(
         if (!isInvincible && isAttack && pCount % 20 == 0) {
             //pCount로 이 함수에 약간의 텀을 줌.
 
-            val bullet = PlayerBullet(
-                kind.bulletImg.toImageIcon(this::class, 20, 20),
-                (x + 15).toDouble(), (y - 40).toDouble(), 90.0, 2.0
-            )
-            //println("총알 장전" + this.pCount)
-            val bulletComponent = BulletComponent(bullet, bullets)
-            gamePanel.add(bulletComponent)
-//            val thread = Thread(bulletComponent)
-            virtualExecutor.submit(bulletComponent)
-            bullets.add(bulletComponent)
+
+            if (weaponLevel == 0) { // 총알 한줄만 발사
+                createBullet(gamePanel, (x + 15), (y - 40), 90.0, 2.0)
+            }
+            if (weaponLevel == 1) { // 총알 2줄 발사
+                createBullet(gamePanel, (x + 15), (y - 40), 90.0, 2.0)
+                createBullet(gamePanel, (x + 25), (y - 40), 90.0, 2.0)
+            }
+            if (weaponLevel == 2) { // 총알 3줄 발사
+                createBullet(gamePanel, (x + 15), (y - 40), 45.0, 2.0)
+                createBullet(gamePanel, (x + 25), (y - 40), 130.0, 2.0)
+                createBullet(gamePanel, (x + 35), (y - 40), 0.0, 2.0)
+            }
+
+
 
             if (this.pCount == 3150) this.pCount = 0 //초기화
         }
@@ -83,9 +84,24 @@ class PlayerUnit(
         this.pCount++
     }
 
+    private fun createBullet(
+        gamePanel: GamePanel,
+        x: Int, y: Int, angel: Double, speed: Double
+    ) {
+        val bullet = PlayerBullet(
+            kind.bulletImg.toImageIcon(this::class, 20, 20),
+            x.toDouble(), y.toDouble(), angel, speed
+        )
+
+        val bulletComponent = BulletComponent(bullet, bullets)
+        gamePanel.add(bulletComponent)
+        virtualExecutor.submit(bulletComponent)
+        bullets.add(bulletComponent)
+    }
+
 
     private fun move() {
-        if (isUp && y>0) {
+        if (isUp && y > 0) {
             y--
         }
         if (isDown && y < SCREEN_HEIGHT) {
@@ -100,15 +116,12 @@ class PlayerUnit(
     }
 
 
-
-
-
     fun weaponLevelUp(isWeaponLevelUp: Boolean) {
         this.isWeaponLevelUp = isWeaponLevelUp
-        if (isWeaponLevelUp && weaponLevel < 6) {
+        if (isWeaponLevelUp && weaponLevel < 3) {
             weaponLevel += 1
             println("무기 레벨 : $weaponLevel")
-            if (weaponLevel == 5) {
+            if (weaponLevel == 3) {
                 weaponLevel = 0
             }
         }
@@ -121,6 +134,8 @@ class PlayerUnit(
         Thread.sleep(1000)
 
     }
+
+
 
 
 

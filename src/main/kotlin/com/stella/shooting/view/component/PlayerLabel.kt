@@ -22,7 +22,7 @@ class PlayerLabel(
     override fun run() {
         while (player.isLife) {
             Thread.sleep(5)
-            player.gameOver()
+            gameOver()
             player.keyProcess()
             player.fireListner(gamePanel)
 
@@ -35,11 +35,13 @@ class PlayerLabel(
         setSize(player.width, player.height)
     }
 
-    private fun crushToEnemyBullet() {
-        //val bullets = playerLabel.player.bullets
-
-
+    private fun gameOver() {
+        if (player.life < 1) {
+            player.isLife = false
+            gamePanel.isPlaying = false
+        }
     }
+
 
 
 

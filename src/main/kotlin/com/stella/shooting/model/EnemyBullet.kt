@@ -57,7 +57,7 @@ class EnemyBullet(
         playerLabel.setIcon(explosionIcon)
         y = 800.0
 
-        //player.life--
+        player.life--
         player.isInvincible = true
         Thread.sleep(100)
         playerLabel.setIcon(player.playerInvincibleIcon)

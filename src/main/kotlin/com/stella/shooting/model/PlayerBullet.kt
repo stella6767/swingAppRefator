@@ -33,7 +33,7 @@ class PlayerBullet(
         y -= sin(Math.toRadians(this.angel)) * speed
 
 
-        if (x > 1000 || x < -500 || y < -100 || y > 1000) {
+        if (x > 1000 || x < -500 || y < -1000 || y > 1000) {
             // map 바깥으로 나가면
             Thread.sleep(100)
             isLife = false
@@ -42,8 +42,10 @@ class PlayerBullet(
     }
 
     override fun crush() {
-        this.y = 0.0
+        this.y = -500.0
     }
+
+
 
 
 

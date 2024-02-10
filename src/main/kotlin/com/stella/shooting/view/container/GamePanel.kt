@@ -26,7 +26,7 @@ class GamePanel(
     private val playerLabel = createPlayer(playerKind)
     private val player = playerLabel.player
 
-    private var isPlaying: Boolean = true // 게임실행 여부
+    var isPlaying: Boolean = true // 게임실행 여부
     private val stageImg: Image = "/images/Stage.png".toImageIcon(this::class.java).image // 배경 이미지
     private val bossStageImg: Image = "/images/vsBossStage.png".toImageIcon(this::class.java).image // 보스 스테이지 이미지
     private val titleImg: Image = "/images/GameTitle.gif".toImageIcon(this::class.java).image
@@ -83,11 +83,13 @@ class GamePanel(
             lifeCounting()
             batchEnemy()
             //checkCrush()
-
             appear++
             repaint()
             Thread.sleep(5)
         }
+
+        gameFrame.dispose()
+        GameFrame()
     }
 
 
@@ -114,10 +116,10 @@ class GamePanel(
 //            EnemyUnitLabel(EnemyUnit(500, 300, EnemyKind.Enemy2), playerLabel, this)
 //        }
 //
-        if (appear == 500 || appear == 1500 || appear == 3500 || appear == 5000 || appear == 6000) {
-            EnemyUnitLabel(EnemyUnit(600, -200, EnemyKind.Enemy3), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(0, 0, EnemyKind.Enemy4), playerLabel, this)
-        }
+//        if (appear == 500 || appear == 1500 || appear == 3500 || appear == 5000 || appear == 6000) {
+//            EnemyUnitLabel(EnemyUnit(600, -200, EnemyKind.Enemy3), playerLabel, this)
+//            EnemyUnitLabel(EnemyUnit(0, 0, EnemyKind.Enemy4), playerLabel, this)
+//        }
 //        if (appear == 6000) {
 //            EnemyUnitLabel(EnemyUnit(300, -50, EnemyKind.Enemy5), playerLabel, this)
 //            EnemyUnitLabel(EnemyUnit(500, -50, EnemyKind.Enemy5), playerLabel, this)
@@ -132,8 +134,8 @@ class GamePanel(
 //        }
 
         if (appear == 500) {
-            //EnemyUnitLabel(EnemyUnit(0, 0, EnemyKind.BOSS), playerLabel, this)
-            BossUnitLabel(BossUnit(0, -200, playerLabel, gamePanel = this), this)
+            EnemyUnitLabel(EnemyUnit(0, -200, EnemyKind.BOSS), playerLabel, this)
+            //BossUnitLabel(BossUnit(0, -200, playerLabel, gamePanel = this), this)
             //boss = BossUnit(0, -100, playerLabel, gamePanel = this)
         }
 
@@ -154,7 +156,7 @@ class GamePanel(
         gameFrame.addKeyListener(object : KeyAdapter() {
             override fun keyPressed(e: KeyEvent) {
                 when (e.keyCode) {
-//                    KeyEvent.VK_1 -> player.setWepponLevelUp(true)
+                    KeyEvent.VK_1 -> player.weaponLevelUp(true)
                     KeyEvent.VK_ENTER -> gameFrame.change(PanelName.SELECTAPI)
                     KeyEvent.VK_SPACE -> player.isAttack = true
                     KeyEvent.VK_UP -> player.isUp = true
@@ -166,7 +168,7 @@ class GamePanel(
 
             override fun keyReleased(e: KeyEvent) {
                 when (e.keyCode) {
-//                    KeyEvent.VK_1 -> playerModel.setWepponLevelUp(false)
+                    KeyEvent.VK_1 -> player.weaponLevelUp(false)
                     KeyEvent.VK_SPACE -> player.isAttack = false
                     KeyEvent.VK_UP -> player.isUp = false
                     KeyEvent.VK_DOWN -> player.isDown = false

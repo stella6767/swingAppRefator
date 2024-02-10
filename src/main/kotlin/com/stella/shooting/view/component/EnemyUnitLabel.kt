@@ -1,13 +1,10 @@
 package com.stella.shooting.view.component
 
+import com.stella.shooting.config.EnemyKind
 import com.stella.shooting.config.SwingComponentBehavior
 import com.stella.shooting.config.toImageIcon
-
 import com.stella.shooting.model.EnemyUnit
 import com.stella.shooting.view.container.GamePanel
-import java.awt.Color
-import java.awt.Image
-import javax.swing.ImageIcon
 import javax.swing.JLabel
 import kotlin.math.abs
 
@@ -17,7 +14,7 @@ class EnemyUnitLabel(
     val gamePanel: GamePanel,
 ) : JLabel(), Runnable, SwingComponentBehavior {
 
-    private val explosionIcon = "/images/explosion.gif".toImageIcon(this::class.java)
+    private val explosionIcon = "/images/explosion.gif".toImageIcon(this::class, enemy.width, enemy.height)
 
     init {
         icon = enemy.image
@@ -66,13 +63,13 @@ class EnemyUnitLabel(
             val player = playerLabel.player
 
             player.isCollision = true
-            enemy.isCollision = true
 
+            enemy.life--
 
             if (player.isCollision) {
                 // 충돌후 이미지 변경 및 목숨카운트
                 playerLabel.setIcon(explosionIcon)
-                //player.life--
+                player.life--
 
                 player.isInvincible = true
                 Thread.sleep(100)
@@ -91,14 +88,22 @@ class EnemyUnitLabel(
 
 
     private fun explosion() {
-        if (enemy.isCollision || enemy.life < 1) {
-            println("????")
+        if (enemy.life < 1) {
+
             enemy.image = explosionIcon
             icon = explosionIcon
             Thread.sleep(50)
-            enemy.y = 1000 // 맵 바깥으로 적 던짐
-            Thread.sleep(50)
-            //enemy.isLife = false
+
+            if (enemy.kind == EnemyKind.BOSS) {
+                enemy.isLife = false
+                Thread.sleep(2000)
+                println("보스 처치!!")
+                System.exit(1) // 프로그램 종료
+            } else {
+                enemy.y = 1000 // 맵 바깥으로 적 던짐
+            }
+
+
         }
     }
 

@@ -57,14 +57,14 @@ class BossUnit(
             for (j in 1..5) {
                 createBullet(
                     (180 + (30 * j)).toDouble(),
-                    x + 80.0, y + 600.0,
+                    x + 80.0, y + 500.0,
                     0.5, gamePanel
                 )
             }
             for (j in 1..5) {
                 createBullet(
                     (180 + (30 * j)).toDouble(),
-                    x + 480.0, y + 600.0,
+                    x + 480.0, y + 500.0,
                     0.5, gamePanel
                 )
             }
@@ -74,7 +74,7 @@ class BossUnit(
             for (j in 1..7) {
                 createBullet(
                     (180 + (25 * j)).toDouble(),
-                    x + 280.0, y + 400.0,
+                    x + 280.0, y + 300.0,
                     1.0, gamePanel
                 )
             }

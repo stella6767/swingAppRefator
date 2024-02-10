@@ -115,7 +115,7 @@ enum class EnemyKind(
 
     BOSS(
         "/images/boss3.gif",
-        500,
+        100,
         { enemy: EnemyUnit ->
 
         },
