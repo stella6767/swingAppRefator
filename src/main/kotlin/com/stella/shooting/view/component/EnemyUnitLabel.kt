@@ -1,20 +1,32 @@
 package com.stella.shooting.view.component
 
+import com.stella.shooting.config.SwingComponentBehavior
 import com.stella.shooting.config.toImageIcon
 import com.stella.shooting.model.EnemyUnit
+import com.stella.shooting.view.container.GamePanel
 import java.awt.Graphics
+import java.awt.Image
+import javax.swing.ImageIcon
 import javax.swing.JLabel
 import kotlin.math.abs
 
 class EnemyUnitLabel(
     private val enemy: EnemyUnit,
     private val playerLabel: PlayerLabel,
-) : JLabel(), Runnable {
+    val gamePanel: GamePanel,
+) : JLabel(), Runnable, SwingComponentBehavior {
 
     private val explosionIcon = "/images/explosion.gif".toImageIcon(this::class.java)
 
     init {
-        icon = enemy.image
+
+        val image = enemy.image.image
+        val changedImg =
+            image.getScaledInstance(enemy.width, enemy.height, Image.SCALE_SMOOTH)
+        val newImageIcon = ImageIcon(changedImg)
+        icon = newImageIcon
+
+        gamePanel.add(this)
         val thread = Thread(this)
         thread.name = enemy.kind.name + this.hashCode()
         thread.start()
@@ -25,23 +37,27 @@ class EnemyUnitLabel(
         while (enemy.isLife) {
 
             enemy.explosion(explosionIcon)
-
             Thread.sleep(10)
-            setLocation(enemy.x, enemy.y)
             enemy.move()
+
+            setComponent()
+
             if (enemy.y > 900) {
                 println(Thread.currentThread().name + " terminated")
                 enemy.isLife = false
             }
 
-            //enemy.addBullet(100)
-            enemy.fire()
-
+            enemy.createBullets(gamePanel)
 
             crushToPlayer()
             crushToPlayerBullet()
         }
 
+    }
+
+    override fun setComponent() {
+        setLocation(enemy.x, enemy.y)
+        setSize(enemy.width, enemy.height)
     }
 
 
@@ -118,17 +134,6 @@ class EnemyUnitLabel(
         return result
     }
 
-
-    fun paints(g: Graphics) {
-        g.drawImage(enemy.image.image, enemy.x, enemy.y, enemy.width, enemy.height, null)
-        for (bullet in enemy.bullets) {
-            g.drawImage(
-                bullet.image.image, bullet.x.toInt(), bullet.y.toInt(), bullet.width,
-                bullet.height, null
-            )
-        }
-
-    }
 
 
 }

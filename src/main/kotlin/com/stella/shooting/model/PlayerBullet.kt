@@ -30,8 +30,6 @@ class PlayerBullet(
         y -= sin(Math.toRadians(this.angel)) * speed
 
 
-
-
         if (x > 1000 || x < -500 || y < -100 || y > 1000) {
             // map 바깥으로 나가면
             isLife = false

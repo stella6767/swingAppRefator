@@ -100,20 +100,20 @@ class GamePanel(
 
     private fun batchEnemy() { // 적기 맵에 배치
         if (appear == 500 || appear == 3000) {
-            enemys.add(EnemyUnitLabel(EnemyUnit(50, 0, 50, 50, EnemyKind.Enemy1), playerLabel))
-            enemys.add(EnemyUnitLabel(EnemyUnit(100, -50, 50, 50, EnemyKind.Enemy1), playerLabel))
-            enemys.add(EnemyUnitLabel(EnemyUnit(150, -100, 50, 50, EnemyKind.Enemy1), playerLabel))
-            enemys.add(EnemyUnitLabel(EnemyUnit(200, -150, 50, 50, EnemyKind.Enemy1), playerLabel))
-            enemys.add(EnemyUnitLabel(EnemyUnit(250, -200, 50, 50, EnemyKind.Enemy1), playerLabel))
+            enemys.add(EnemyUnitLabel(EnemyUnit(50, 0, EnemyKind.Enemy1), playerLabel, this))
+            enemys.add(EnemyUnitLabel(EnemyUnit(100, -50, EnemyKind.Enemy1), playerLabel, this))
+            enemys.add(EnemyUnitLabel(EnemyUnit(150, -100, EnemyKind.Enemy1), playerLabel, this))
+            enemys.add(EnemyUnitLabel(EnemyUnit(200, -150, EnemyKind.Enemy1), playerLabel, this))
+            enemys.add(EnemyUnitLabel(EnemyUnit(250, -200, EnemyKind.Enemy1), playerLabel, this))
         }
         if (appear == 5000) {
-            enemys.add(EnemyUnitLabel(EnemyUnit(-100, 300, 150, 150, EnemyKind.Enemy2), playerLabel))
-            enemys.add(EnemyUnitLabel(EnemyUnit(500, 300, 150, 150, EnemyKind.Enemy2), playerLabel))
+            enemys.add(EnemyUnitLabel(EnemyUnit(-100, 300, EnemyKind.Enemy2), playerLabel, this))
+            enemys.add(EnemyUnitLabel(EnemyUnit(500, 300, EnemyKind.Enemy2), playerLabel, this))
         }
 
         if (appear == 500 || appear == 1500 || appear == 3500 || appear == 5000 || appear == 6000) {
-            enemys.add(EnemyUnitLabel(EnemyUnit(600, -200, 100, 100, EnemyKind.Enemy3), playerLabel))
-            enemys.add(EnemyUnitLabel(EnemyUnit(0, 0, 100, 100, EnemyKind.Enemy4), playerLabel))
+            enemys.add(EnemyUnitLabel(EnemyUnit(600, -200, EnemyKind.Enemy3), playerLabel, this))
+            enemys.add(EnemyUnitLabel(EnemyUnit(0, 0, EnemyKind.Enemy4), playerLabel, this))
         }
     }
 
@@ -124,14 +124,6 @@ class GamePanel(
         g.drawImage(bossStageImg, 0, bossStageBY1, null)
         g.drawImage(bossStageImg, 0, bossStageBY2, null)
 
-//        for (playerBullet in playerLabel.player.bullets) {
-//            playerBullet.paint(g)
-//        }
-
-        for (enemy in enemys) {
-            enemy.paints(g)
-        }
-        //boss.bossUpdate(g)
     }
 
 

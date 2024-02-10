@@ -7,7 +7,9 @@ enum class EnemyKind(
     val life: Int,
     val moveFunc: (enemy: EnemyUnit) -> Unit,
     val bulletImg: String,
-    val bulletSize: Int,
+    val bulletInterval: Int,
+    val width: Int,
+    val height: Int,
 ) {
 
 
@@ -18,7 +20,9 @@ enum class EnemyKind(
             enemy.y++
         },
         "",
-        0
+        0,
+        50,
+        50
     ),
 
     Enemy2(
@@ -40,7 +44,9 @@ enum class EnemyKind(
             }
         },
         "/images/bullet2.png",
-        100
+        100,
+        150,
+        150
     ),
 
     Enemy3(
@@ -53,6 +59,8 @@ enum class EnemyKind(
             }
         },
         "/images/bullet1.png",
+        100,
+        100,
         100
     ),
 
@@ -66,6 +74,8 @@ enum class EnemyKind(
             }
         },
         "/images/bullet1.png",
+        100,
+        100,
         100
     ),
 
@@ -81,7 +91,9 @@ enum class EnemyKind(
             }
         },
         "/images/bullet2.png",
-        100
+        50,
+        150,
+        150
     ),
 
     Enemy6(
@@ -96,7 +108,9 @@ enum class EnemyKind(
             }
         },
         "/images/missle.png",
-        100
+        50,
+        250,
+        250
     ),
 
 }
