@@ -5,7 +5,9 @@ import com.stella.shooting.model.EnemyUnit
 enum class EnemyKind(
     val icon: String, // 플레이어 기체 이미지
     val life: Int,
-    val moveFunc: (enemy: EnemyUnit) -> Unit
+    val moveFunc: (enemy: EnemyUnit) -> Unit,
+    val bulletImg: String,
+    val bulletSize: Int,
 ) {
 
 
@@ -14,7 +16,9 @@ enum class EnemyKind(
         1,
         { enemy: EnemyUnit ->
             enemy.y++
-        }
+        },
+        "",
+        0
     ),
 
     Enemy2(
@@ -30,33 +34,69 @@ enum class EnemyKind(
             } else {
                 enemy.y--
                 if (enemy.y > 100) {
-                    enemy.y --
-                    enemy.x --
+                    enemy.y--
+                    enemy.x--
                 }
             }
-        }
+        },
+        "/images/bullet2.png",
+        100
     ),
 
     Enemy3(
         "/images/enemy3.png",
         3,
         { enemy: EnemyUnit ->
-            enemy.y ++
+            enemy.y++
             if (enemy.y < 400) {
-                enemy.x --
+                enemy.x--
             }
-        }
+        },
+        "/images/bullet1.png",
+        100
     ),
 
     Enemy4(
         "/images/enemy4.png",
         3,
         { enemy: EnemyUnit ->
-            enemy.y ++
+            enemy.y++
             if (enemy.y < 400) {
-                enemy.x ++
+                enemy.x++
             }
-        }
+        },
+        "/images/bullet1.png",
+        100
+    ),
+
+    Enemy5(
+        "/images/enemy5.png",
+        3,
+        { enemy: EnemyUnit ->
+            enemy.y++
+            if (enemy.y < 450) {
+                enemy.x--
+            } else {
+                enemy.x++
+            }
+        },
+        "/images/bullet2.png",
+        100
+    ),
+
+    Enemy6(
+        "/images/enemy6_2.png",
+        15,
+        { enemy: EnemyUnit ->
+
+            if (enemy.y > 50) {
+                enemy.y --
+                enemy.x --
+
+            }
+        },
+        "/images/missle.png",
+        100
     ),
 
 }

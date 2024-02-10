@@ -13,21 +13,19 @@ class PlayerLabel(
 
     init {
         icon = player.icon
+        val thread = Thread(this)
+        thread.name = "player"
+        thread.start()
     }
 
     override fun run() {
-
         while (player.isLife) {
             Thread.sleep(5)
             player.gameOver()
             player.keyProcess()
-            player.playerAttackProcess()
-
-
 //            PlayerBullet()
             setLocation(player.x, player.y) // repaint()
             setSize(player.width, player.height)
-
         }
     }
 
@@ -44,20 +42,11 @@ class PlayerLabel(
             println("남은 목숨==>${player.life}")
             player.respon()
 
-
             setIcon(player.icon)
             player.isInvincible = false
             player.isCollision = false
 
             repaint()
-        }
-    }
-
-
-    fun paintBullet(g: Graphics) {
-        // PlayaerAttack의 자료형을 double로 두고, drawImage를 돌릴 때만 형변환 해준다 (삼각함수 계산을 위해)
-        for (bullet in player.bullets) {
-            g.drawImage(bullet.image, bullet.x.toInt(), bullet.y.toInt(), bullet.width, bullet.height, null)
         }
     }
 

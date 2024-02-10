@@ -10,10 +10,8 @@ import java.awt.Graphics
 import java.awt.Image
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
-import java.util.*
 import javax.swing.JLabel
 import javax.swing.JPanel
-import kotlin.math.abs
 
 class GamePanel(
     private val gameFrame: GameFrame,
@@ -26,8 +24,6 @@ class GamePanel(
     private val stageImg: Image = "/images/Stage.png".toImageIcon(this::class.java).image // 배경 이미지
     private val bossStageImg: Image = "/images/vsBossStage.png".toImageIcon(this::class.java).image // 보스 스테이지 이미지
     private val titleImg: Image = "/images/GameTitle.gif".toImageIcon(this::class.java).image
-    private val explosionIcon = "/images/explosion.gif".toImageIcon(this::class.java)
-
 
     var stageY: Int = -(stageImg.getHeight(null) - bossStageImg.getHeight(null)) // 배경 이미지의 Y좌표
     var bossStageBY1: Int = -(stageImg.getHeight(null)) // 보스 스테이지 이미지 1의 Y좌표
@@ -45,9 +41,6 @@ class GamePanel(
 
     init {
         this.add(playerLabel)
-        val thread = Thread(playerLabel)
-        thread.name = "player"
-        thread.start()
         keyListener()
     }
 
@@ -128,10 +121,10 @@ class GamePanel(
         g.drawImage(bossStageImg, 0, bossStageBY1, null)
         g.drawImage(bossStageImg, 0, bossStageBY2, null)
 
-        playerLabel.paintBullet(g)
         for (enemy in enemys) {
-            enemy.enemyDraw(g)
+            enemy.drawEnemy(g)
         }
+
         //boss.bossUpdate(g)
     }
 

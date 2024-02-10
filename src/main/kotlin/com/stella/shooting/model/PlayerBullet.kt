@@ -13,33 +13,35 @@ class PlayerBullet(
     override var width: Int = 20,
     override var height: Int = 20,
     override var isLife: Boolean = true,
-    override val collision: Boolean = false,
-) : Bullet, Runnable {
-
-    init {
-        Thread(this).start()
-    }
+    override val isCollision: Boolean = false,
+) : Bullet {
 
 
-    override fun run() {
-        while (isLife){
-            if (collision) {
+
+
+    override fun move() {
+        while (isLife) {
+            if (isCollision) {
                 y = (-100).toDouble()
             }
+
             Thread.sleep(10)
+
+            x -= cos(Math.toRadians(this.angel)) * speed
+            y -= sin(Math.toRadians(this.angel)) * speed
+
             if (x > 1000 || x < -500 || y < -100 || y > 1000) {
                 // map 바깥으로 나가면
                 isLife = false
-                //System.out.println(Thread.currentThread().name + "  총알이 죽었습니다");
             }
         }
     }
 
     override fun fire() {
-        x -= cos(Math.toRadians(this.angel)) * speed
-        y -= sin(Math.toRadians(this.angel)) * speed
-    }
 
+        println("????")
+        //Thread.sleep(500)
+    }
 
 
 

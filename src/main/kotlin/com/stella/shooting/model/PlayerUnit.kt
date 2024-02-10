@@ -4,6 +4,7 @@ import com.stella.shooting.config.PlayerKind
 import com.stella.shooting.config.SCREEN_HEIGHT
 import com.stella.shooting.config.SCREEN_WIDTH
 import com.stella.shooting.config.toImageIcon
+import com.stella.shooting.view.component.PlayerBulletLabel
 import java.util.*
 
 class PlayerUnit(
@@ -37,7 +38,8 @@ class PlayerUnit(
     private var weaponLevel = 0
     private var isWeaponLevelUp: Boolean = false
 
-    var bullets = Collections.synchronizedList(mutableListOf<Bullet>())
+    var bullets =
+        Collections.synchronizedList(mutableListOf<PlayerBulletLabel>())
 
     fun gameOver() {
         if (life < 1) {
@@ -47,22 +49,23 @@ class PlayerUnit(
 
     fun keyProcess() {
         move()
+        fireBullet()
+        //this.pCount ++
+    }
 
-        if (!isInvincible && isAttack && pCount % 30 == 0) {
-            //ThreadSleep 대신 pCount로 이 함수에 약간의 텀을 줌.
+    private fun fireBullet() {
+        if (!isInvincible && isAttack) {
+            println("isAttck:::$isAttack")
             val bullet = PlayerBullet(
                 kind.bulletImg.toImageIcon(this::class.java).image,
                 (x + 20).toDouble(), (y - 40).toDouble(), 90.0, 2.0
             )
-            //println("총알 장전" + this.pCount)
-            bullets.add(bullet)
-            if (this.pCount == 3150) this.pCount = 0 //초기화
+            bullets.add(PlayerBulletLabel(bullet))
         }
-
-        this.pCount ++
+        playerAttackProcess()
     }
 
-    fun playerAttackProcess() {
+    private fun playerAttackProcess() {
         for (bullet in bullets) {
             bullet.fire()
         }

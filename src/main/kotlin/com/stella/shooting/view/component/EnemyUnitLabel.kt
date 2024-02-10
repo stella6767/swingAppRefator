@@ -1,7 +1,6 @@
 package com.stella.shooting.view.component
 
 import com.stella.shooting.config.toImageIcon
-import com.stella.shooting.model.Bullet
 import com.stella.shooting.model.EnemyUnit
 import java.awt.Graphics
 import javax.swing.JLabel
@@ -35,8 +34,12 @@ class EnemyUnitLabel(
                 enemy.isLife = false
             }
 
+            //enemy.addBullet(100)
+            enemy.fire()
+
+
             crushToPlayer()
-            crushBullet()
+            crushToPlayerBullet()
         }
 
     }
@@ -52,10 +55,8 @@ class EnemyUnitLabel(
 
         ) {
             println("충돌 확인")
-
             //Player에게 Thread.sleep을 걸면 안 되니 임시방편 여기로
             val player = playerLabel.player
-
             player.isCollision = true
             enemy.isCollision = true
 
@@ -82,38 +83,24 @@ class EnemyUnitLabel(
     }
 
 
-    private fun crushBullet(){
+    private fun crushToPlayerBullet() {
         val bullets = playerLabel.player.bullets
         for (bullet in bullets) {
-            crushToPlayerBullet(bullet)
+            // 적기가 아군총알에 충돌시 구현,
+            val isCrash = crash(
+                bullet.x.toInt(), bullet.y.toInt(),
+                enemy.x, enemy.y,
+                bullet.width, bullet.height,
+                enemy.width, enemy.height
+            )
+            if (isCrash && (enemy.life > 0)) {
+                //playerBullets.removeAt(i) // 충돌판정이 맞으면, 총알 사라지고 적의 체력이 1 깍임
+                //i = i - 1 // 인덱스 에러해결하기 위해
+                //enemyUnitList.get(j).setLife(enemyUnitList.get(j).getLife() - 1)
+                enemy.life--
+                println("적 hp==>${enemy.life}")
+            }
         }
-    }
-
-    private fun crushToPlayerBullet(bullet: Bullet) { // 적기가 아군총알에 충돌시 구현,
-
-//        enemy.image = explosionIcon
-//        println("적기와 아군비행기 총알 충돌")
-//        Thread.sleep(1000)
-//        enemyUnit.y = 1000 // Thread 강제종료 방법이 마땅히 안 떠오름 대충 이렇게
-//        enemyUnit.repaint()
-
-        val isCrash = crash(
-            bullet.x.toInt(), bullet.y.toInt(),
-            enemy.x, enemy.y,
-            bullet.width, bullet.height,
-            enemy.width, enemy.height
-        )
-
-        if (isCrash && (enemy.life > 0)) {
-            //playerBullets.removeAt(i) // 충돌판정이 맞으면, 총알 사라지고 적의 체력이 1 깍임
-            //i = i - 1 // 인덱스 에러해결하기 위해
-            //enemyUnitList.get(j).setLife(enemyUnitList.get(j).getLife() - 1)
-            enemy.life--
-            println("적 hp==>${enemy.life}")
-
-        }
-
-
     }
 
 
@@ -124,9 +111,7 @@ class EnemyUnitLabel(
         w1: Int, h1: Int,
         w2: Int, h2: Int
     ): Boolean {
-
         // x,y : 위치값 , w,h : 이미지의 높이와 길이.
-
         val result = (abs(((x1 + w1 / 2) - (x2 + w2 / 2)).toDouble()) < (w2 / 2 + w1 / 2)
                 && abs(((y1 + h1 / 2) - (y2 + h2 / 2)).toDouble()) < (h2 / 2 + h1 / 2))
 
@@ -134,8 +119,15 @@ class EnemyUnitLabel(
     }
 
 
-    fun enemyDraw(g: Graphics) {
+    fun drawEnemy(g: Graphics) {
         g.drawImage(enemy.image.image, enemy.x, enemy.y, enemy.width, enemy.height, null)
+        for (bullet in enemy.bullets) {
+            g.drawImage(
+                bullet.image, bullet.x.toInt(), bullet.y.toInt(), bullet.width,
+                bullet.height, null
+            )
+        }
+
     }
 
 
