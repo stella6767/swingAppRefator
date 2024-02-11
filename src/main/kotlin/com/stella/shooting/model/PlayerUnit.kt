@@ -1,10 +1,8 @@
 package com.stella.shooting.model
 
-import com.stella.shooting.config.PlayerKind
-import com.stella.shooting.config.SCREEN_HEIGHT
-import com.stella.shooting.config.SCREEN_WIDTH
-import com.stella.shooting.config.toImageIcon
+import com.stella.shooting.config.*
 import com.stella.shooting.view.component.BulletComponent
+import com.stella.shooting.view.container.GameFrame
 import com.stella.shooting.view.container.GamePanel
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
@@ -55,23 +53,23 @@ class PlayerUnit(
 
     }
 
-    fun fireListner(gamePanel: GamePanel) {
+    fun fireListner() {
 
         if (!isInvincible && isAttack && pCount % 20 == 0) {
             //pCount로 이 함수에 약간의 텀을 줌.
 
 
             if (weaponLevel == 0) { // 총알 한줄만 발사
-                createBullet(gamePanel, (x + 15), (y - 40), 90.0, 2.0)
+                createBullet( (x + 15), (y - 40), 90.0, 2.0)
             }
             if (weaponLevel == 1) { // 총알 2줄 발사
-                createBullet(gamePanel, (x + 15), (y - 40), 90.0, 2.0)
-                createBullet(gamePanel, (x + 25), (y - 40), 90.0, 2.0)
+                createBullet( (x + 15), (y - 40), 90.0, 2.0)
+                createBullet( (x + 25), (y - 40), 90.0, 2.0)
             }
             if (weaponLevel == 2) { // 총알 3줄 발사
-                createBullet(gamePanel, (x + 15), (y - 40), 45.0, 2.0)
-                createBullet(gamePanel, (x + 25), (y - 40), 130.0, 2.0)
-                createBullet(gamePanel, (x + 35), (y - 40), 0.0, 2.0)
+                createBullet( (x + 15), (y - 40), 45.0, 2.0)
+                createBullet( (x + 25), (y - 40), 130.0, 2.0)
+                createBullet( (x + 35), (y - 40), 0.0, 2.0)
             }
 
 
@@ -85,7 +83,6 @@ class PlayerUnit(
     }
 
     private fun createBullet(
-        gamePanel: GamePanel,
         x: Int, y: Int, angel: Double, speed: Double
     ) {
         val bullet = PlayerBullet(
@@ -94,7 +91,8 @@ class PlayerUnit(
         )
 
         val bulletComponent = BulletComponent(bullet, bullets)
-        gamePanel.add(bulletComponent)
+        val gameFrame = ApplicationContextProvider.getBean("gameFrame") as GameFrame
+        gameFrame.panel.add(bulletComponent)
         virtualExecutor.submit(bulletComponent)
         bullets.add(bulletComponent)
     }

@@ -46,6 +46,7 @@ class GamePanel(
 
 
     init {
+        Thread(this).start()
         add(playerLabel)
         keyListener()
     }
@@ -106,31 +107,31 @@ class GamePanel(
     private fun batchEnemy() { // 적기 맵에 배치
 
         if (appear == 500 || appear == 1500 || appear == 2500) {
-            EnemyUnitLabel(EnemyUnit(50, 0, EnemyKind.Enemy1), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(100, -50, EnemyKind.Enemy1), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(150, -100, EnemyKind.Enemy1), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(200, -150, EnemyKind.Enemy1), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(250, -200, EnemyKind.Enemy1), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(50, 0, EnemyKind.Enemy1), playerLabel)
+            EnemyUnitLabel(EnemyUnit(100, -50, EnemyKind.Enemy1), playerLabel)
+            EnemyUnitLabel(EnemyUnit(150, -100, EnemyKind.Enemy1), playerLabel)
+            EnemyUnitLabel(EnemyUnit(200, -150, EnemyKind.Enemy1), playerLabel)
+            EnemyUnitLabel(EnemyUnit(250, -200, EnemyKind.Enemy1), playerLabel)
         }
         if (appear == 5000) {
-            EnemyUnitLabel(EnemyUnit(-100, 300, EnemyKind.Enemy2), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(500, 300, EnemyKind.Enemy2), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(-100, 300, EnemyKind.Enemy2), playerLabel)
+            EnemyUnitLabel(EnemyUnit(500, 300, EnemyKind.Enemy2), playerLabel)
         }
 
         if (appear == 500 || appear == 1500 || appear == 3500 || appear == 5000 || appear == 6000) {
-            EnemyUnitLabel(EnemyUnit(600, -200, EnemyKind.Enemy3), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(0, 0, EnemyKind.Enemy4), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(600, -200, EnemyKind.Enemy3), playerLabel)
+            EnemyUnitLabel(EnemyUnit(0, 0, EnemyKind.Enemy4), playerLabel)
         }
         if (appear == 6000) {
-            EnemyUnitLabel(EnemyUnit(300, -50, EnemyKind.Enemy5), playerLabel, this)
-            EnemyUnitLabel(EnemyUnit(500, -50, EnemyKind.Enemy5), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(300, -50, EnemyKind.Enemy5), playerLabel)
+            EnemyUnitLabel(EnemyUnit(500, -50, EnemyKind.Enemy5), playerLabel)
         }
 
         if (appear == 7000) {
-            EnemyUnitLabel(EnemyUnit(650, 400, EnemyKind.Enemy6), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(650, 400, EnemyKind.Enemy6), playerLabel)
         }
         if (appear == 10000) {
-            EnemyUnitLabel(EnemyUnit(0, -200, EnemyKind.BOSS), playerLabel, this)
+            EnemyUnitLabel(EnemyUnit(0, -200, EnemyKind.BOSS), playerLabel)
             //BossUnitLabel(BossUnit(0, -200, playerLabel, gamePanel = this), this)
             //boss = BossUnit(0, -100, playerLabel, gamePanel = this)
         }

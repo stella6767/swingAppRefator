@@ -2,6 +2,8 @@ package com.stella.shooting.view.container
 
 import com.stella.shooting.config.*
 import com.stella.shooting.view.component.PlayerLabel
+import jakarta.annotation.PostConstruct
+import jakarta.annotation.PreDestroy
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import javax.swing.JFrame
@@ -11,11 +13,14 @@ class GameFrame : JFrame(
 
 ) {
 
+    lateinit var panel: JPanel
+
     init {
         init()
         setting()
         isVisible = true
     }
+
 
     private fun init() {
         change(PanelName.INITTITLE) // 초기 타이틀 화면
@@ -34,22 +39,25 @@ class GameFrame : JFrame(
         playerKind: PlayerKind? = null
     ) {
         //약간 찝찝하긴 한데..
-        val panel = when (panelName) {
+        this.panel = when (panelName) {
             PanelName.INITTITLE -> InitPanel(this)
             PanelName.SELECTAPI -> SelectPanel(this)
-            PanelName.INGAME -> GamePanel(this, playerKind ?: throw  IllegalArgumentException("cant find player"))
+            PanelName.INGAME -> GamePanel(this, playerKind ?: throw IllegalArgumentException("cant find player"))
         }
 
         contentPane.removeAll()
         contentPane.add(panel)
-        if (panel is Runnable){
-            Thread(panel).start()
-        }
+
         revalidate()
         repaint()
-
     }
 
+
+    @PreDestroy
+    fun preDestroy() {
+
+        println("소멸!!")
+    }
 
 
 }

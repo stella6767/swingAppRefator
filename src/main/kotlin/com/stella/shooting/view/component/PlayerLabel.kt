@@ -24,7 +24,7 @@ class PlayerLabel(
             Thread.sleep(5)
             gameOver()
             player.keyProcess()
-            player.fireListner(gamePanel)
+            player.fireListner()
 
             setComponent()
         }

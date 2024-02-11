@@ -1,9 +1,11 @@
 package com.stella.shooting.model
 
+import com.stella.shooting.config.ApplicationContextProvider
 import com.stella.shooting.config.EnemyKind
 import com.stella.shooting.config.toImageIcon
 import com.stella.shooting.view.component.BulletComponent
 import com.stella.shooting.view.component.PlayerLabel
+import com.stella.shooting.view.container.GameFrame
 import com.stella.shooting.view.container.GamePanel
 import java.util.concurrent.Executors
 
@@ -26,6 +28,8 @@ class EnemyUnit(
     private var virtualExecutor = Executors.newVirtualThreadPerTaskExecutor()
 
 
+    val gameFrame = ApplicationContextProvider.getBean("gameFrame") as GameFrame
+
     fun move() {
         kind.moveFunc(this)
     }
@@ -33,29 +37,28 @@ class EnemyUnit(
 
 
 
-    fun createBulletsByKind(gamePanel: GamePanel, playerLabel: PlayerLabel){
-
+    fun createBulletsByKind(playerLabel: PlayerLabel){
         when(kind){
-            EnemyKind.BOSS ->createBossBullets(gamePanel, playerLabel)
-            else -> createBullets(gamePanel, playerLabel)
+            EnemyKind.BOSS ->createBossBullets(playerLabel)
+            else -> createBullets( playerLabel)
         }
     }
 
 
-    private fun createBossBullets(gamePanel: GamePanel, playerLabel: PlayerLabel) {
+    private fun createBossBullets(playerLabel: PlayerLabel) {
         if ((bcount % 200) == 0) {
             for (j in 1..5) {
                 createBossBullet(
                     (180 + (30 * j)).toDouble(),
                     x + 80.0, y + 400.0,
-                    0.5, gamePanel,playerLabel
+                    0.5, playerLabel
                 )
             }
             for (j in 1..5) {
                 createBossBullet(
                     (180 + (30 * j)).toDouble(),
                     x + 480.0, y + 400.0,
-                    0.5, gamePanel, playerLabel
+                    0.5,  playerLabel
                 )
             }
         }
@@ -65,7 +68,7 @@ class EnemyUnit(
                 createBossBullet(
                     (180 + (25 * j)).toDouble(),
                     x + 280.0, y + 200.0,
-                    1.0, gamePanel, playerLabel
+                    1.0,  playerLabel
                 )
             }
         }
@@ -75,7 +78,7 @@ class EnemyUnit(
 
 
 
-    private fun createBullets(gamePanel: GamePanel, playerLabel: PlayerLabel) {
+    private fun createBullets(playerLabel: PlayerLabel) {
 
         if (kind.bulletImg != "" && ((bcount % kind.bulletInterval) == 0) ) {
             val bullet = EnemyBullet(
@@ -86,7 +89,10 @@ class EnemyUnit(
                 playerLabel = playerLabel
             )
             val bulletComponent = BulletComponent(bullet, bullets)
-            gamePanel.add(bulletComponent)
+
+
+            gameFrame.panel.add(bulletComponent)
+
             virtualExecutor.submit(bulletComponent)
             bullets.add(bulletComponent)
             if (bcount == 5000) bcount = 0
@@ -102,7 +108,6 @@ class EnemyUnit(
         x: Double,
         y: Double,
         speed: Double,
-        gamePanel: GamePanel,
         playerLabel: PlayerLabel
     ) {
         val bullet = EnemyBullet(
@@ -113,7 +118,7 @@ class EnemyUnit(
             playerLabel = playerLabel
         )
         val bulletComponent = BulletComponent(bullet, bullets)
-        gamePanel.add(bulletComponent)
+        gameFrame.panel.add(bulletComponent)
         virtualExecutor.submit(bulletComponent)
         bullets.add(bulletComponent)
     }

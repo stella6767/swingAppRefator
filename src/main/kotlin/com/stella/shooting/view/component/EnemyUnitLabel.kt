@@ -11,14 +11,13 @@ import kotlin.math.abs
 class EnemyUnitLabel(
     private val enemy: EnemyUnit,
     private val playerLabel: PlayerLabel,
-    val gamePanel: GamePanel,
 ) : JLabel(), Runnable, SwingComponentBehavior {
 
     private val explosionIcon = "/images/explosion.gif".toImageIcon(this::class, enemy.width, enemy.height)
 
     init {
         icon = enemy.image
-        gamePanel.add(this)
+        enemy.gameFrame.panel.add(this)
         val thread = Thread(this)
         thread.name = enemy.kind.name + this.hashCode()
         thread.start()
@@ -37,7 +36,7 @@ class EnemyUnitLabel(
                 enemy.isLife = false
             }
 
-            enemy.createBulletsByKind(gamePanel, playerLabel)
+            enemy.createBulletsByKind(playerLabel)
             crushToPlayer()
             crushToPlayerBullet()
         }

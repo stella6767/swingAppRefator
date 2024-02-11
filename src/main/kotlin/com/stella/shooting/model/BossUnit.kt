@@ -1,9 +1,11 @@
 package com.stella.shooting.model
 
+import com.stella.shooting.config.ApplicationContextProvider
 import com.stella.shooting.config.EnemyKind
 import com.stella.shooting.config.toImageIcon
 import com.stella.shooting.view.component.BulletComponent
 import com.stella.shooting.view.component.PlayerLabel
+import com.stella.shooting.view.container.GameFrame
 import com.stella.shooting.view.container.GamePanel
 import java.awt.Graphics
 import java.awt.Image
@@ -52,20 +54,20 @@ class BossUnit(
 //        }
 //    }
 
-    fun createBullets(gamePanel: GamePanel) {
+    fun createBullets() {
         if ((bCount % 200) == 0) {
             for (j in 1..5) {
                 createBullet(
                     (180 + (30 * j)).toDouble(),
                     x + 80.0, y + 500.0,
-                    0.5, gamePanel
+                    0.5,
                 )
             }
             for (j in 1..5) {
                 createBullet(
                     (180 + (30 * j)).toDouble(),
                     x + 480.0, y + 500.0,
-                    0.5, gamePanel
+                    0.5,
                 )
             }
         }
@@ -75,7 +77,7 @@ class BossUnit(
                 createBullet(
                     (180 + (25 * j)).toDouble(),
                     x + 280.0, y + 300.0,
-                    1.0, gamePanel
+                    1.0,
                 )
             }
         }
@@ -88,7 +90,6 @@ class BossUnit(
         x: Double,
         y: Double,
         speed: Double,
-        gamePanel: GamePanel
     ) {
         val bullet = EnemyBullet(
             x, y,
@@ -98,7 +99,10 @@ class BossUnit(
             playerLabel = playerLabel
         )
         val bulletComponent = BulletComponent(bullet, bullets)
-        gamePanel.add(bulletComponent)
+
+        val gameFrame = ApplicationContextProvider.getBean("gameFrame") as GameFrame
+        gameFrame.panel.add(bulletComponent)
+
         virtualExecutor.submit(bulletComponent)
         bullets.add(bulletComponent)
     }
